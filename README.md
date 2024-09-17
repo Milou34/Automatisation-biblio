@@ -37,7 +37,8 @@ pip install -r requirements.txt
 ├── LICENCE.txt             # Condition d'utilisation
 ├── main.py                 # Script principal
 ├── .gitignore              # Ignorer les fichiers compilés
-└── src/                    # Source du code
+├── .github/                # Dossier de configuration du repository
+└── src/                    # Dossier du code source
 ```
 
 ## Authors
