@@ -1,63 +1,61 @@
-import pandas as pd
-import os
+import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 from openpyxl.styles import Font
+import fnmatch
+import os
 
-# Dossier contenant les fichiers Excel
-input_folder = r'C:\Users\MarylouBERTIN\OneDrive - Grive Environnement\Documents\Projets\Référente\106 - Féricy\Bibliographie\ZNIEFF 1'
-output_file = r'C:\Users\MarylouBERTIN\OneDrive - Grive Environnement\Bureau\Final.xlsx'
+def xml_to_excel(folder_source):
 
-# Les noms des tableaux à extraire
-tableaux_recherches = ["Habitats déterminants", "Espèces déterminantes", "Espèces à statut réglementé"]
+    # Liste pour stocker les fichiers trouvés
+    fichiers_xml = []
 
-# Initialisation des listes pour stocker les données
-result_tables = []
-zone_names = []
+    # Parcours des fichiers dans le dossier
+    for chemin, sous_dossiers, fichiers in os.walk(folder_source):
+        for fichier in fichiers:
+            if fnmatch.fnmatch(fichier, '*.xml'):
+                fichiers_xml.append(os.path.join(chemin, fichier))
 
-# Parcourir tous les fichiers Excel dans le dossier
-for filename in os.listdir(input_folder):
-    if filename.endswith('.xlsx'):
-        print(f"Chargement des exels sources : {filename}")
-        # Charger chaque fichier Excel
-        file_path = os.path.join(input_folder, filename)
-        xls = pd.ExcelFile(file_path)
-        sheet_page = 0
-        # Parcourir toutes les feuilles du fichier
-        for sheet_name in xls.sheet_names:
-            sheet_page += 1
-            sheet_data = xls.parse(sheet_name)
+    # Créer un nouveau fichier Excel
+    wb = Workbook()
+    ws = wb.active
+    
+    # Affiche les fichiers XML trouvés
+    for fichier in fichiers_xml:
+        # Parse le fichier XML
+        tree = ET.parse(fichier)
+        root = tree.getroot()
 
-            # Chercher les tableaux à partir du nom de la colonne ou d'autres critères
-            for tableau in tableaux_recherches:
-                if any(sheet_data.columns.str.contains(tableau, case=False, na=False)) or \
-                sheet_data.map(lambda x: tableau.lower() in str(x).lower()).any().any():
-                    # Ajouter le nom de la zone et le tableau aux résultats
-                    if sheet_page == 1:
-                        zone_name = sheet_data.iloc[0, 0]  # Lire le nom de la zone (première cellule)
-                        print(f"Zone : {zone_name}")
-                        zone_names.append(zone_name)
-                    result_tables.append(sheet_data)
-                    break
+        # Ajout du titre "Informations générales"
+        ws.append(["Informations générales"])  # Première ligne avec le titre
+        title_cell = ws['A1']
+        title_cell.font = Font(bold=True)  # Mettre le titre en gras
 
-# Créer un nouveau fichier Excel
-with pd.ExcelWriter(output_file, engine='openpyxl') as writer:
-    wb = writer.book
-    ws = wb.create_sheet(title='Résumé')
+        # Fusionner les cellules pour le titre
+        ws.merge_cells('A1:D1')
 
-    # Ajouter les noms des zones et les données dans le fichier Excel
-    row_start = 1
-    for zone_name, df in zip(zone_names, result_tables):
-        # Ajouter le nom de la zone en gras
-        ws.cell(row=row_start, column=1, value=zone_name).font = Font(bold=True)
-        row_start += 1
+        # Ajouter les en-têtes du premier tableau
+        headers = ['ID national', 'Nom ZNIEFF', 'Type ZNIEFF', 'Surface totale ZNIEFF']
+        ws.append(headers)
 
-        # Ajouter les données du tableau
-        for r_idx, row in df.iterrows():
-            for c_idx, value in enumerate(row):
-                ws.cell(row=row_start, column=c_idx+1, value=value)
-            row_start += 1
-        
-        # Ajouter une ligne vide entre les tableaux
-        row_start += 1
+        id_national = int(root.find('NM_SFFZN').text)
+        nom_znieff = root.find('LB_ZN').text
+        type_znieff = int(root.find('TY_ZONE').text)
+        surface_znieff = float(root.find('SU_ZN').text.replace(',', '.'))
+        headers_value = [id_national, nom_znieff, type_znieff, surface_znieff]
+        ws.append(headers_value)
+        ws.append([])
 
-print(f"Les tableaux ont été combinés et enregistrés dans {output_file}.")
+        if type_znieff == 1:
+            ws.title = "ZNIEFF 1"
+        elif type_znieff == 2:
+            ws.title = "ZNIEFF 2"
+
+    # Sauvegarder le fichier Excel
+    wb.save(folder_source + '\Récap.xlsx')
+    print(f"Fichier Excel '{folder_source}' généré avec succès !")
+
+# Demander les chemins des fichiers à l'utilisateur
+folder_source = input("Entrez le chemin du dossier des XML sources, le excel sera créé dans ce dossier : ")
+
+# Lancer la conversion XML vers Excel
+xml_to_excel(folder_source)
