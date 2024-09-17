@@ -107,3 +107,6 @@ for code in valid_znieff_codes:
 print("\nTéléchargement des fichiers N2000...")
 for code in valid_n2000_codes:
     download_xml(code, destination_folder, "N2000")
+
+# Message final pour confirmer la fin des téléchargements
+print(f"\nTéléchargements terminés. Les fichiers ont été sauvegardés dans le dossier : {destination_folder}")
