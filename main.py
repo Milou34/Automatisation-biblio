@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 import fnmatch
 import os
-from src.especesDeterminantes import process_esp_D
+from src.especesDeterminantes import merge_identical_groups, process_esp_D
 from src.infosGenerales import adjust_columns, extract_general_info, create_table
 from src.habitats import process_habitats
 
@@ -82,6 +82,7 @@ def main(folder_source):
                      ["Groupe", "Code espèce", "Nom scientifique", "Nom vernaculaire", "Statut(s) biologique(s)", "Sources", "Degré d'abondance", "Effectif inférieur estimé", "Effectif supérieur estimé", "Année d'observation"],
                      current_row)
         
+        start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
         for espece_row in root.findall('.//ESPECE_ROW'):
             fg_esp = espece_row.find('FG_ESP').text
 
@@ -89,6 +90,9 @@ def main(folder_source):
             if fg_esp == "D":
                 current_row = process_esp_D(espece_row, ws, current_row)
 
+        # Fusionner les cellules de la colonne 'Groupe' après l'ajout des lignes
+        merge_identical_groups(ws, start_row_for_merge, current_row - 1)
+        
         # Ajoute une ligne vide entre chaque fichier XML
         ws.append([])
         current_row += 1  # Mettre à jour la ligne après avoir ajouté une ligne vide
@@ -98,7 +102,8 @@ def main(folder_source):
             current_row_znieff1 = current_row
         elif type_znieff == 2:
             current_row_znieff2 = current_row
-
+            
+        
     # Sauvegarder le fichier Excel
     adjust_columns(wb)
     wb.save(os.path.join(folder_source, 'Récap.xlsx'))

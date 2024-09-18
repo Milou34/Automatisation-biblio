@@ -71,3 +71,27 @@ def process_esp_D(esp_row, ws, current_row):
     
     # Retourner la nouvelle valeur de current_row
     return current_row
+
+
+def merge_identical_groups(ws, start_row, end_row):
+    """
+    Fusionne les cellules de la colonne 'Groupe' si elles contiennent des valeurs identiques dans des lignes consécutives.
+    """
+    col_letter = "A"  # La colonne "Groupe" est la colonne A
+    merge_start_row = start_row
+    previous_value = ws[f"{col_letter}{start_row}"].value
+
+    for row in range(start_row + 1, end_row + 1):
+        current_value = ws[f"{col_letter}{row}"].value
+
+        if current_value != previous_value:
+            if row - 1 > merge_start_row:
+                # Fusionner les cellules de la colonne A de la ligne merge_start_row à row-1
+                ws.merge_cells(f"{col_letter}{merge_start_row}:{col_letter}{row - 1}")
+            # Réinitialiser la valeur de départ
+            merge_start_row = row
+            previous_value = current_value
+
+    # Fusionner les dernières cellules si nécessaire
+    if end_row > merge_start_row:
+        ws.merge_cells(f"{col_letter}{merge_start_row}:{col_letter}{end_row}")
