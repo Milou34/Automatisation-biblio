@@ -47,4 +47,4 @@ pip install -r requirements.txt
 - **[Valentin Guyon](https://www.linkedin.com/in/valentin-guyon/)** : Lead Developper
 
 ## Licence
-Ce projet est sous licence Apache 2.0. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
+Ce projet est sous licence Apache 2.0. Voir le fichier [LICENSE](./LICENSE.txt) pour plus de détails.
