@@ -28,6 +28,9 @@ def process_habitats(typo_info_row, ws, current_row):
         # Récupérer tout le texte de la balise LB_HAB sans les balises de mise en forme comme <em>
         lb_hab_element = typo_row.find('.//LB_HAB')
         lb_hab = ''.join(lb_hab_element.itertext()) if lb_hab_element is not None else ''
+        lb_code = typo_row.find('.//LB_CODE')
+        lb_code = lb_code.text if lb_code is not None else ''
+        lb_hab = lb_code + " " + lb_hab
 
         # Déterminer la colonne selon la valeur de LB_TYPO
         if lb_typo == "EUNIS 2012":
