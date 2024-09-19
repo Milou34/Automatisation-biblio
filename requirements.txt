@@ -1,5 +1,2 @@
-request
-re
 openpyxl
-xml.etree.ElementTree
-fnmatch
+requests
