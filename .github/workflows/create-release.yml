@@ -15,6 +15,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: List available artifacts
+        run: |
+          echo "Listing available artifacts"
+          ls -al
+          
       # Download the artifact (executable zip) from the previous workflow
       - name: Download executable artifact
         uses: actions/download-artifact@v4
