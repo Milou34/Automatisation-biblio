@@ -35,31 +35,26 @@ def main(folder_source):
                 tree = ET.parse(os.path.join(chemin, fichier))
                 root = tree.getroot()
                 file_path = os.path.join(chemin, fichier)
-
-                # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE
-                type_znieff = int(
-                    root.find("TY_ZONE").text
-                )  # On suppose que TY_ZONE existe et est valide
-                
-                code_zone = int(
-                    root.find("NM_SFFZN").text
-                )     
                 
                 # Sélectionner la feuille et la ligne en fonction du type de ZNIEFF
-                if type_znieff == 1:
-                    ws = ws_znieff1
-                    new_file_name = f"znieff1_{code_zone}.xml"
+                if root.tag == 'ZNIEFF':
+                    # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE
+                    type_znieff = int(
+                        root.find("TY_ZONE").text
+                    )  # On suppose que TY_ZONE existe et est valide
+                    code_zone = int(
+                        root.find("NM_SFFZN").text
+                    )
+                    new_file_name = f"znieff{type_znieff}_{code_zone}.xml"
                     new_file_path = os.path.join(chemin, new_file_name)
                     # Renommer le fichier
                     os.rename(file_path, new_file_path)
-                    current_row = process_znieff(ws, root, current_row_znieff1)
-                elif type_znieff == 2:
-                    ws = ws_znieff2
-                    new_file_name = f"znieff2_{code_zone}.xml"
-                    new_file_path = os.path.join(chemin, new_file_name)
-                    # Renommer le fichier
-                    os.rename(file_path, new_file_path)
-                    current_row = process_znieff(ws, root, current_row_znieff2)
+                    if type_znieff == 1:     
+                        ws = ws_znieff1
+                        current_row = process_znieff(ws, root, current_row_znieff1)
+                    else:
+                        ws = ws_znieff2
+                        current_row = process_znieff(ws, root, current_row_znieff2)
                 else:
                     ws = ws_n2000 
                     current_row = process_n2000(ws, root, current_row_n2000)                    
@@ -69,10 +64,15 @@ def main(folder_source):
                 current_row += 1  # Mettre à jour la ligne après avoir ajouté une ligne vide
 
                 # Mettre à jour la ligne courante pour le type de ZNIEFF
-                if type_znieff == 1:
-                    current_row_znieff1 = current_row
-                elif type_znieff == 2:
-                    current_row_znieff2 = current_row
+                if root.tag == "ZNIEFF":
+                    # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE
+                    type_znieff = int(
+                        root.find("TY_ZONE").text
+                    )  # On suppose que TY_ZONE existe et est valide
+                    if type_znieff == 1:
+                        current_row_znieff1 = current_row
+                    else:
+                        current_row_znieff2 = current_row
                 else:
                     current_row_n2000 = current_row
 
