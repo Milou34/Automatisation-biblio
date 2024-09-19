@@ -15,13 +15,13 @@ jobs:
     steps:
       # Checkout the repository
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Set up Python
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.x' # Remplacez par la version de Python que vous utilisez
+          python-version: '3.10'
 
       # Install PyInstaller
       - name: Install PyInstaller
@@ -36,7 +36,7 @@ jobs:
 
       # Upload the executable as an artifact
       - name: Upload executable
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: my-executable
           path: dist/main.exe
