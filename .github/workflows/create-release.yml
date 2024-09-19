@@ -19,7 +19,8 @@ jobs:
       - name: Download executable artifact
         uses: actions/download-artifact@v4
         with:
-          name: my-executable.zip
+          name: my-executable
+          run-id: ${{ github.event.workflow_run.id }}
 
       # Create GitHub Release
       - name: Create GitHub Release
