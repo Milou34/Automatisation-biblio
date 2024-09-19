@@ -1,0 +1,43 @@
+name: Create Release
+
+on:
+  workflow_run:
+    workflows: ["Build Executable"]  # Ce workflow s'exécute après "Build Executable"
+    types:
+      - completed
+
+jobs:
+  release:
+    runs-on: ubuntu-latest  # Utilise une instance Linux pour les releases (pas besoin de Windows ici)
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Download the artifact (executable zip) from the previous workflow
+      - name: Download executable artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: executable
+
+      # Create GitHub Release
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "v${{ github.run_number }}-${{ github.sha }}"
+          release_name: "Release ${{ github.run_number }}-${{ github.sha }}"
+          draft: false
+          prerelease: false
+
+      # Upload executable to the release
+      - name: Upload executable to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: my-executable.zip
+          asset_name: my-executable.zip
+          asset_content_type: application/zip
