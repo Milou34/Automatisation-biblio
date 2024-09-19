@@ -19,7 +19,7 @@ jobs:
       - name: Download executable artifact
         uses: actions/download-artifact@v3
         with:
-          name: executable
+          name: my-executable
 
       # Create GitHub Release
       - name: Create GitHub Release
