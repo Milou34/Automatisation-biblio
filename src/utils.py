@@ -4,7 +4,7 @@ from openpyxl.styles import Font, Alignment
 from openpyxl.utils import get_column_letter
 
 
-def extract_general_info(root, tag_paths):
+def extract_info(root, tag_paths):
     """Extrait les valeurs des balises spécifiées depuis le XML et retourne une liste des valeurs en string.
 
     Args:
@@ -48,6 +48,46 @@ def create_table(ws, title, headers, start_row):
     # Retourner la ligne suivante après le tableau
     return start_row + 2
 
+
+def merge_groups(ws, start_row, end_row, merge_column, check_column):
+    """
+    Fusionne les cellules d'une colonne spécifiée si elles contiennent des valeurs identiques
+    dans une colonne de vérification spécifiée, sur des lignes consécutives.
+
+    Args:
+        ws (openpyxl.worksheet.worksheet.Worksheet): La feuille Excel dans laquelle effectuer la fusion.
+        start_row (int): Le numéro de la ligne de début.
+        end_row (int): Le numéro de la ligne de fin.
+        merge_column (str): La lettre de la colonne dans laquelle fusionner les cellules.
+        check_column (str): La lettre de la colonne dans laquelle vérifier les valeurs identiques.
+    """
+    merge_start_row = start_row
+    previous_value = ws[f"{check_column}{start_row}"].value
+
+    for row in range(start_row + 1, end_row + 1):
+        current_value = ws[f"{check_column}{row}"].value
+        
+        if merge_column == "C":
+            print(f'{current_value}')
+
+        if current_value != previous_value:
+            if row - 1 > merge_start_row:
+                # Fusionner les cellules de la colonne `merge_column` de la ligne merge_start_row à row-1
+                ws.merge_cells(f"{merge_column}{merge_start_row}:{merge_column}{row - 1}")
+            # Réinitialiser la valeur de départ pour la prochaine fusion
+            merge_start_row = row
+            previous_value = current_value
+
+    # Fusionner les dernières cellules si nécessaire
+    if end_row > merge_start_row:
+        ws.merge_cells(f"{merge_column}{merge_start_row}:{merge_column}{end_row}")
+
+    # Optionnel: Ajuster les alignements des cellules fusionnées
+    for row in range(start_row, end_row + 1):
+        cell = ws[f"{merge_column}{row}"]
+        cell.alignment = cell.alignment.copy(horizontal='center')
+
+        
 
 def adjust_columns(wb):
     """

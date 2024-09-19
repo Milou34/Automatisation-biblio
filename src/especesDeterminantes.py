@@ -1,45 +1,60 @@
-def process_esp_D(esp_row, ws, current_row):
+from src.utils import extract_info
 
-    groupe = esp_row.find(".//GROUPE")
-    groupe = groupe.text if groupe is not None and groupe.text is not None else ""
 
-    code_esp = esp_row.find(".//CD_NOM")
-    code_esp = (
-        code_esp.text if code_esp is not None and code_esp.text is not None else ""
-    )
-    if code_esp:
-        code_esp = int(code_esp)
-    else:
-        code_esp = ""
+def process_esp_d(esp_row, ws, current_row):
+    """
+    Traite une ligne d'espèce déterminante et ajoute les informations à la feuille Excel.
 
-    nom_esp = esp_row.find(".//NOM_COMPLET")
-    nom_esp = nom_esp.text if nom_esp is not None and nom_esp.text is not None else ""
+    Args:
+        esp_row (ET.Element): L'élément XML représentant une ligne d'espèce.
+        ws (openpyxl.worksheet.worksheet.Worksheet): La feuille Excel dans laquelle écrire les données.
+        current_row (int): Le numéro de la ligne courante dans la feuille Excel.
 
-    nom_vern = esp_row.find(".//NOM_VERN")
-    nom_vern = (
-        nom_vern.text if nom_vern is not None and nom_vern.text is not None else ""
-    )
-
-    statut_bio_esp = esp_row.find(".//STATUT_BIO_ESP")
-    statut_bio_esp = (
-        statut_bio_esp.text
-        if statut_bio_esp is not None and statut_bio_esp.text is not None
-        else ""
-    )
-
+    Returns:
+        int: Le numéro de la ligne suivante après avoir écrit les données.
+    """
+    
+    # Définir les chemins des balises XML à extraire
+    tag_paths = [
+        ".//GROUPE",        # Groupe
+        ".//CD_NOM",        # Code espèce
+        ".//NOM_COMPLET",   # Nom scientifique
+        ".//NOM_VERN",      # Nom vernaculaire
+        ".//STATUT_BIO_ESP",# Statut biologique
+        ".//AUTEUR",        # Source
+        ".//CD_ABOND",      # Degré d'abondance
+        ".//NB_I_ABOND",    # Effectif inférieur estimé
+        ".//NB_S_ABOND",    # Effectif supérieur estimé
+        ".//AN_I_OBS",      # Année d'observation initiale
+        ".//AN_S_OBS"       # Année d'observation finale
+    ]
+    
+    # Utiliser extract_info pour extraire les valeurs
+    extracted_values = extract_info(esp_row, tag_paths)
+    
+    # Traiter les valeurs extraites
+    groupe = extracted_values[0]
+    
+    # Gestion du code espèce (convertir en int si possible)
+    code_esp = extracted_values[1]
+    code_esp = int(code_esp) if code_esp else ""
+    
+    nom_esp = extracted_values[2]
+    nom_vern = extracted_values[3]
+    
+    # Traiter le statut biologique
+    statut_bio_esp = extracted_values[4]
     if statut_bio_esp == "R":
         statut_bio_esp_txt = "Reproduction certaine ou probable"
     elif statut_bio_esp == "RI":
         statut_bio_esp_txt = "Reproduction indéterminée"
     else:
         statut_bio_esp_txt = ""
-
-    source = esp_row.find(".//AUTEUR")
-    source = source.text if source is not None and source.text is not None else ""
-
-    deg_abd = esp_row.find(".//CD_ABOND")
-    deg_abd = deg_abd.text if deg_abd is not None and deg_abd.text is not None else ""
-
+    
+    source = extracted_values[5]
+    
+    # Traiter le degré d'abondance
+    deg_abd = extracted_values[6]
     if deg_abd == "A":
         deg_abd_txt = "Fort"
     elif deg_abd == "B":
@@ -48,35 +63,21 @@ def process_esp_D(esp_row, ws, current_row):
         deg_abd_txt = "Faible"
     else:
         deg_abd_txt = ""
+    
+    # Gestion de l'effectif inférieur
+    eff_I = extracted_values[7]
+    eff_I = int(eff_I) if eff_I else ""
+    
+    # Gestion de l'effectif supérieur
+    eff_S = extracted_values[8]
+    eff_S = int(eff_S) if eff_S else ""
+    
+    # Combiner la période d'observation
+    observation_I_text = extracted_values[9]
+    observation_S_text = extracted_values[10]
+    observation = observation_I_text + " - " + observation_S_text if observation_I_text or observation_S_text else ""
 
-    eff_I = esp_row.find(".//NB_I_ABOND")
-    eff_I = eff_I.text if eff_I is not None and eff_I.text is not None else ""
-    if eff_I:
-        eff_I = int(eff_I)
-    else:
-        eff_I = ""
-
-    eff_S = esp_row.find(".//NB_S_ABOND")
-    eff_S = eff_S.text if eff_S is not None and eff_S.text is not None else ""
-    if eff_S:
-        eff_S = int(eff_S)
-    else:
-        eff_S = ""
-
-    observation_I = esp_row.find(".//AN_I_OBS")
-    observation_I_text = (
-        observation_I.text
-        if observation_I is not None and observation_I.text is not None
-        else ""
-    )
-    observation_S = esp_row.find(".//AN_S_OBS")
-    observation_S_text = (
-        observation_S.text
-        if observation_S is not None and observation_S.text is not None
-        else ""
-    )
-    observation = observation_I_text + " - " + observation_S_text
-
+    # Créer la liste des valeurs à ajouter à la feuille Excel
     espece_values = [
         groupe,
         code_esp,
@@ -98,27 +99,3 @@ def process_esp_D(esp_row, ws, current_row):
 
     # Retourner la nouvelle valeur de current_row
     return current_row
-
-
-def merge_identical_groups(ws, start_row, end_row):
-    """
-    Fusionne les cellules de la colonne 'Groupe' si elles contiennent des valeurs identiques dans des lignes consécutives.
-    """
-    col_letter = "A"  # La colonne "Groupe" est la colonne A
-    merge_start_row = start_row
-    previous_value = ws[f"{col_letter}{start_row}"].value
-
-    for row in range(start_row + 1, end_row + 1):
-        current_value = ws[f"{col_letter}{row}"].value
-
-        if current_value != previous_value:
-            if row - 1 > merge_start_row:
-                # Fusionner les cellules de la colonne A de la ligne merge_start_row à row-1
-                ws.merge_cells(f"{col_letter}{merge_start_row}:{col_letter}{row - 1}")
-            # Réinitialiser la valeur de départ
-            merge_start_row = row
-            previous_value = current_value
-
-    # Fusionner les dernières cellules si nécessaire
-    if end_row > merge_start_row:
-        ws.merge_cells(f"{col_letter}{merge_start_row}:{col_letter}{end_row}")

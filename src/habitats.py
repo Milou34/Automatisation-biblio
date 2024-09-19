@@ -1,46 +1,54 @@
+from src.utils import extract_info
+
 def process_habitats(typo_info_row, ws, current_row):
-    """Traite les habitats à partir des balises TYPO_INFO_ROW et renvoie les valeurs des colonnes."""
-    ## L'auteur
-    source = typo_info_row.find(".//AUTEUR")
-    source_text = source.text if source is not None and source.text is not None else ""
+    """
+    Traite les habitats à partir des balises TYPO_INFO_ROW et renvoie les valeurs des colonnes.
 
-    ## La surface
-    surface = typo_info_row.find(".//PC_TYPO")
-    surface_text = (
-        surface.text if surface is not None and surface.text is not None else ""
-    )
-    if surface_text:
-        surface_float = float(surface_text.replace(",", "."))
-    else:
-        surface_float = ""
+    Args:
+        typo_info_row (ET.Element): L'élément XML représentant une ligne d'information d'habitat.
+        ws (openpyxl.worksheet.worksheet.Worksheet): La feuille Excel dans laquelle écrire les données.
+        current_row (int): Le numéro de la ligne courante dans la feuille Excel.
 
-    ## La période d'observation
-    observation_I = typo_info_row.find(".//AN_I_OBS")
-    observation_I_text = (
-        observation_I.text
-        if observation_I is not None and observation_I.text is not None
-        else ""
-    )
-    observation_S = typo_info_row.find(".//AN_S_OBS")
-    observation_S_text = (
-        observation_S.text
-        if observation_S is not None and observation_S.text is not None
-        else ""
-    )
+    Returns:
+        int: Le numéro de la ligne suivante après avoir écrit les données.
+    """
+
+    # Définir les chemins des balises à extraire pour la source, la surface et la période d'observation
+    tag_paths = [
+        ".//AUTEUR",     # Auteur
+        ".//PC_TYPO",    # Surface
+        ".//AN_I_OBS",   # Début période observation
+        ".//AN_S_OBS"    # Fin période observation
+    ]
+    
+    # Utiliser extract_info pour extraire les données
+    extracted_values = extract_info(typo_info_row, tag_paths)
+
+    # Traiter les valeurs extraites
+    source_text = extracted_values[0]
+
+    # Gestion de la surface (convertir en float si disponible)
+    surface_text = extracted_values[1]
+    surface_float = float(surface_text.replace(",", ".")) if surface_text else ""
+
+    # Combiner la période d'observation
+    observation_I_text = extracted_values[2]
+    observation_S_text = extracted_values[3]
     observation = observation_I_text + " - " + observation_S_text
 
+    # Initialiser la liste des valeurs d'habitats
     habitats_values = ["", "", "", source_text, surface_float, observation]
 
+    # Parcourir les balises TYPO_ROW pour extraire les informations supplémentaires
     for typo_row in typo_info_row.findall(".//TYPO_ROW"):
         lb_typo = typo_row.find(".//LB_TYPO").text
 
         # Récupérer tout le texte de la balise LB_HAB sans les balises de mise en forme comme <em>
         lb_hab_element = typo_row.find(".//LB_HAB")
-        lb_hab = (
-            "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
-        )
-        lb_code = typo_row.find(".//LB_CODE")
-        lb_code = lb_code.text if lb_code is not None else ""
+        lb_hab = "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
+        
+        # Extraire LB_CODE et combiner avec LB_HAB
+        lb_code = typo_row.find(".//LB_CODE").text if typo_row.find(".//LB_CODE") is not None else ""
         lb_hab = lb_code + " " + lb_hab
 
         # Déterminer la colonne selon la valeur de LB_TYPO

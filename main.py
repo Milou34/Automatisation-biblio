@@ -2,8 +2,9 @@ import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 import fnmatch
 import os
-from src.especesDeterminantes import merge_identical_groups, process_esp_D
-from src.infosGenerales import adjust_columns, extract_general_info, create_table
+from src.especesDeterminantes import process_esp_d
+from src.especesProtegees import process_esp_p
+from src.utils import adjust_columns, extract_info, create_table, merge_groups
 from src.habitats import process_habitats
 
 
@@ -63,7 +64,7 @@ def main(folder_source):
         )
 
         # Extraction des données depuis le fichier XML
-        infos_value = extract_general_info(root, tag_paths)
+        infos_value = extract_info(root, tag_paths)
         # Convertir les valeurs numériques pour l'affichage correct
         infos_value[2] = float(
             infos_value[2].replace(",", ".")
@@ -95,6 +96,9 @@ def main(folder_source):
             # On ne garde que les habitats avec FG_TYPO = "D"
             if fg_typo == "D":
                 current_row = process_habitats(typo_info_row, ws, current_row)
+                
+        ws.append([])
+        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
 
         current_row = create_table(
             ws,
@@ -120,10 +124,37 @@ def main(folder_source):
 
             # On ne garde que les habitats avec FG_TYPO = "D"
             if fg_esp == "D":
-                current_row = process_esp_D(espece_row, ws, current_row)
+                current_row = process_esp_d(espece_row, ws, current_row)
 
         # Fusionner les cellules de la colonne 'Groupe' après l'ajout des lignes
-        merge_identical_groups(ws, start_row_for_merge, current_row - 1)
+        merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")
+        
+        ws.append([])
+        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
+        
+        current_row = create_table(
+            ws,
+            "Espèces à statut réglementé",
+            [
+                "Groupe",
+                "Code espèce",
+                "Nom scientifique",
+                "Statut de déterminance",
+                "Réglementation",
+            ],
+            current_row,
+        )
+
+        start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
+        for espece_row in root.findall(".//ESPECE_PROT_ROW"):
+            current_row = process_esp_p(espece_row, ws, current_row, root)    
+            
+        # Fusionner les cellules pour les colonnes 'Code espèce', 'Nom scientifique', et 'Statut de déterminance' 
+        # après l'ajout des lignes pour les espèces protégées
+        merge_groups(ws, start_row_for_merge, current_row - 1, "D", "B")  # Fusionner les cellules de 'Statut de déterminance'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "C", "B")  # Fusionner les cellules de 'Nom scientifique'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "B", "B")  # Fusionner les cellules de 'Code espèce'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")  # Fusionner les cellules de 'Groupe'
 
         # Ajoute une ligne vide entre chaque fichier XML
         ws.append([])
