@@ -4,11 +4,19 @@ import fnmatch
 import os
 from src.especesDeterminantes import process_esp_d
 from src.especesProtegees import process_esp_p
-from src.utils import adjust_columns, extract_info, create_table, merge_groups
+from src.utils import adjust_columns, close_excel_file, extract_info, create_table, is_excel_file_open, merge_groups
 from src.habitats import process_habitats
 
 
 def main(folder_source):
+
+    output_file = os.path.join(folder_source, "Récap.xlsx")
+
+    # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
+    if is_excel_file_open(output_file):
+        print(f"Le fichier {output_file} est ouvert. Tentative de fermeture...")
+        close_excel_file(output_file)
+        print(f"Fermeture du fichier {output_file} réussie.")
     # Liste pour stocker les fichiers trouvés
     fichiers_xml = []
 
@@ -170,6 +178,9 @@ def main(folder_source):
     adjust_columns(wb)
     wb.save(os.path.join(folder_source, "Récap.xlsx"))
     print(f"Fichier Excel '{folder_source}/Récap.xlsx' généré avec succès !")
+    
+    # Ouvrir le fichier Excel généré
+    os.startfile(output_file)
 
 
 # Demander les chemins des fichiers à l'utilisateur
