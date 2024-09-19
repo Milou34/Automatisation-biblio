@@ -131,7 +131,7 @@ def adjust_columns(wb):
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True, vertical="center")
 
-def is_excel_file_open(file_path):
+def close_excel_if_open(file_path):
     """
     Vérifie si un fichier Excel est ouvert en recherchant les processus liés à Excel.
     
@@ -148,26 +148,11 @@ def is_excel_file_open(file_path):
             if proc.info['name'].lower() in ['excel.exe', 'excel'] or 'EXCEL' in proc.info['name'].upper():
                 for open_file in proc.open_files():
                     if file_name in open_file.path:
-                        return True
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            continue
-    return False
-
-def close_excel_file(file_path):
-    """
-    Ferme les processus Excel qui ont ouvert le fichier spécifié.
-    
-    Args:
-        file_path (str): Le chemin du fichier à fermer.
-    """
-    file_name = os.path.basename(file_path)
-    
-    for proc in psutil.process_iter(['pid', 'name']):
-        try:
-            if proc.info['name'].lower() in ['excel.exe', 'excel'] or 'EXCEL' in proc.info['name'].upper():
-                for open_file in proc.open_files():
-                    if file_name in open_file.path:
+                        print(f"Le fichier {file_name} est ouvert. Tentative de fermeture...")
                         proc.terminate()
                         proc.wait()  # Assure que le processus est bien terminé
+                        print(f"Fermeture du fichier {file_name} réussie.")
+                        return
+                    
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue
