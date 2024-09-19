@@ -61,62 +61,68 @@ destination_folder = input(
 os.makedirs(destination_folder, exist_ok=True)
 
 # Saisie et validation des codes ZNIEFF
-while True:
-    codes_znieff_input = input(
-        "Veuillez entrer les codes ZNIEFF, séparés par des virgules (ex : 740120259, 123456789) : "
-    )
-    codes_znieff = [
-        code.strip() for code in codes_znieff_input.split(",") if code.strip()
-    ]
-
-    # Validation des codes ZNIEFF
-    valid_znieff_codes = []
-    invalid_znieff_codes = []
-    for code in codes_znieff:
-        if is_valid_znieff_code(code):
-            valid_znieff_codes.append(code)
-        else:
-            invalid_znieff_codes.append(code)
-
-    if invalid_znieff_codes:
-        print("\nCertains codes ZNIEFF sont invalides :")
-        for code in invalid_znieff_codes:
-            print(
-                f"Code ZNIEFF invalide : {code}. Assurez-vous qu'il est composé de 9 chiffres."
-            )
-    else:
-        print(
-            "\nTous les codes ZNIEFF sont valides ou aucun code ZNIEFF n'a été saisi."
+def input_codes_znieff():
+    while True:
+        codes_znieff_input = input(
+            "Veuillez entrer les codes ZNIEFF, séparés par des virgules (ex : 740120259, 123456789) : "
         )
-        break
+        codes_znieff = [
+            code.strip() for code in codes_znieff_input.split(",") if code.strip()
+        ]
+
+        # Validation des codes ZNIEFF
+        valid_znieff_codes = []
+        invalid_znieff_codes = []
+        for code in codes_znieff:
+            if is_valid_znieff_code(code):
+                valid_znieff_codes.append(code)
+            else:
+                invalid_znieff_codes.append(code)
+
+        if invalid_znieff_codes:
+            print("\nCertains codes ZNIEFF sont invalides :")
+            for code in invalid_znieff_codes:
+                print(
+                    f"Code ZNIEFF invalide : {code}. Assurez-vous qu'il est composé de 9 chiffres."
+                )
+        else:
+            print(
+                "\nTous les codes ZNIEFF sont valides ou aucun code ZNIEFF n'a été saisi."
+            )
+            return valid_znieff_codes
+
 
 # Saisie et validation des codes N2000
-while True:
-    codes_n2000_input = input(
-        "Veuillez entrer les codes N2000, séparés par des virgules (ex : FR1234567, FR7654321) : "
-    )
-    codes_n2000 = [
-        code.strip() for code in codes_n2000_input.split(",") if code.strip()
-    ]
+def input_codes_n2000():
+    while True:
+        codes_n2000_input = input(
+            "Veuillez entrer les codes N2000, séparés par des virgules (ex : FR1234567, FR7654321) : "
+        )
+        codes_n2000 = [
+            code.strip() for code in codes_n2000_input.split(",") if code.strip()
+        ]
 
-    # Validation des codes N2000
-    valid_n2000_codes = []
-    invalid_n2000_codes = []
-    for code in codes_n2000:
-        if is_valid_n2000_code(code):
-            valid_n2000_codes.append(code)
+        # Validation des codes N2000
+        valid_n2000_codes = []
+        invalid_n2000_codes = []
+        for code in codes_n2000:
+            if is_valid_n2000_code(code):
+                valid_n2000_codes.append(code)
+            else:
+                invalid_n2000_codes.append(code)
+
+        if invalid_n2000_codes:
+            print("\nCertains codes N2000 sont invalides :")
+            for code in invalid_n2000_codes:
+                print(
+                    f"Code N2000 invalide : {code}. Assurez-vous qu'il commence par 'FR' suivi de 7 chiffres."
+                )
         else:
-            invalid_n2000_codes.append(code)
-
-    if invalid_n2000_codes:
-        print("\nCertains codes N2000 sont invalides :")
-        for code in invalid_n2000_codes:
-            print(
-                f"Code N2000 invalide : {code}. Assurez-vous qu'il commence par 'FR' suivi de 7 chiffres."
-            )
-    else:
-        print("\nTous les codes N2000 sont valides ou aucun code N2000 n'a été saisi.")
-        break
+            print("\nTous les codes N2000 sont valides ou aucun code N2000 n'a été saisi.")
+            return valid_n2000_codes
+        
+valid_znieff_codes = input_codes_znieff()
+valid_n2000_codes = input_codes_n2000()
 
 # Télécharger les fichiers XML pour les codes ZNIEFF validés
 print("\nTéléchargement des fichiers ZNIEFF...")
