@@ -83,86 +83,99 @@ def main(folder_source):
         current_row += 2  # Mettre à jour la ligne après avoir ajouté le premier tableau
 
         # Ajouter le deuxième tableau pour les habitats
-        current_row = create_table(
-            ws,
-            "Habitats déterminants",
-            [
-                "EUNIS",
-                "CORINE biotopes",
-                "Habitats d’intérêt communautaire",
-                "Source",
-                "Surface en Ha",
-                "Observation",
-            ],
-            current_row,
-        )
+        if root.find('.//TYPO_INFO_ROW'): 
+            current_row = create_table(
+                ws,
+                "Habitats déterminants",
+                [
+                    "EUNIS",
+                    "CORINE biotopes",
+                    "Habitats d’intérêt communautaire",
+                    "Source",
+                    "Surface en Ha",
+                    "Observation",
+                ],
+                current_row,
+            )
 
-        # Parcourir les balises TYPO_INFO_ROW pour récupérer les habitats
-        for typo_info_row in root.findall(".//TYPO_INFO_ROW"):
-            fg_typo = typo_info_row.find("FG_TYPO").text
+            # Parcourir les balises TYPO_INFO_ROW pour récupérer les habitats
+            for typo_info_row in root.findall(".//TYPO_INFO_ROW"):
+                fg_typo = typo_info_row.find("FG_TYPO").text
 
-            # On ne garde que les habitats avec FG_TYPO = "D"
-            if fg_typo == "D":
-                current_row = process_habitats(typo_info_row, ws, current_row)
+                # On ne garde que les habitats avec FG_TYPO = "D"
+                if fg_typo == "D":
+                    current_row = process_habitats(typo_info_row, ws, current_row)
+            ws.append([])
+            current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
+        else :
+            pass
                 
-        ws.append([])
-        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
+        # Ajoute le 3ème tableau        
+        if root.find('.//ESPECE_ROW'): 
+            current_row = create_table(
+                ws,
+                "Espèces déterminantes",
+                [
+                    "Groupe",
+                    "Code espèce",
+                    "Nom scientifique",
+                    "Nom vernaculaire",
+                    "Statut(s) biologique(s)",
+                    "Sources",
+                    "Degré d'abondance",
+                    "Effectif inférieur estimé",
+                    "Effectif supérieur estimé",
+                    "Année d'observation",
+                ],
+                current_row,
+            )
 
-        current_row = create_table(
-            ws,
-            "Espèces déterminantes",
-            [
-                "Groupe",
-                "Code espèce",
-                "Nom scientifique",
-                "Nom vernaculaire",
-                "Statut(s) biologique(s)",
-                "Sources",
-                "Degré d'abondance",
-                "Effectif inférieur estimé",
-                "Effectif supérieur estimé",
-                "Année d'observation",
-            ],
-            current_row,
-        )
+            start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
+            for espece_row in root.findall(".//ESPECE_ROW"):
+                fg_esp = espece_row.find("FG_ESP").text
 
-        start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
-        for espece_row in root.findall(".//ESPECE_ROW"):
-            fg_esp = espece_row.find("FG_ESP").text
-
-            # On ne garde que les habitats avec FG_TYPO = "D"
-            if fg_esp == "D":
-                current_row = process_esp_d(espece_row, ws, current_row)
-
-        # Fusionner les cellules de la colonne 'Groupe' après l'ajout des lignes
-        merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")
+                # On ne garde que les habitats avec FG_TYPO = "D"
+                if fg_esp == "D":
+                    current_row = process_esp_d(espece_row, ws, current_row)
+                else:
+                    pass
+            # Fusionner les cellules de la colonne 'Groupe' après l'ajout des lignes
+            merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")
+            ws.append([])
+            current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
+        else:
+            pass
         
-        ws.append([])
-        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
-        
-        current_row = create_table(
-            ws,
-            "Espèces à statut réglementé",
-            [
-                "Groupe",
-                "Code espèce",
-                "Nom scientifique",
-                "Statut de déterminance",
-                "Réglementation",
-            ],
-            current_row,
-        )
+        # Ajoute le 4ème tableau
+        if root.find('.//ESPECE_PROT_ROW'): 
+            current_row = create_table(
+                ws,
+                "Espèces à statut réglementé",
+                [
+                    "Groupe",
+                    "Code espèce",
+                    "Nom scientifique",
+                    "Statut de déterminance",
+                    "Réglementation",
+                ],
+                current_row,
+            )
 
-        start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
-        for espece_row in root.findall(".//ESPECE_PROT_ROW"):
-            current_row = process_esp_p(espece_row, ws, current_row, root)    
+            start_row_for_merge = current_row  # Enregistre la ligne de début pour la fusion
+        
+            for espece_row in root.findall(".//ESPECE_PROT_ROW"):
+              current_row = process_esp_p(espece_row, ws, current_row, root)
             
-        # Fusionner les cellules pour les colonnes 'Code espèce', 'Nom scientifique', et 'Statut de déterminance' 
-        # après l'ajout des lignes pour les espèces protégées
-        merge_groups(ws, start_row_for_merge, current_row - 1, "D", "B")  # Fusionner les cellules de 'Statut de déterminance'
-        merge_groups(ws, start_row_for_merge, current_row - 1, "C", "B")  # Fusionner les cellules de 'Nom scientifique'
-        merge_groups(ws, start_row_for_merge, current_row - 1, "B", "B")  # Fusionner les cellules de 'Code espèce'
-        merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")  # Fusionner les cellules de 'Groupe'
+            # Fusionner les cellules pour les colonnes 'Code espèce', 'Nom scientifique', et 'Statut de déterminance' 
+            # après l'ajout des lignes pour les espèces protégées
+            merge_groups(ws, start_row_for_merge, current_row - 1, "D", "B")  # Fusionner les cellules de 'Statut de déterminance'
+            merge_groups(ws, start_row_for_merge, current_row - 1, "C", "B")  # Fusionner les cellules de 'Nom scientifique'
+            merge_groups(ws, start_row_for_merge, current_row - 1, "B", "B")  # Fusionner les cellules de 'Code espèce'
+            merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")  # Fusionner les cellules de 'Groupe'
+        else:
+            pass
+            
+
 
         # Ajoute une ligne vide entre chaque fichier XML
         ws.append([])
