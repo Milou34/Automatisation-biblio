@@ -47,8 +47,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "v-${{ github.sha }}"
-          release_name: "Release v-1-0-${{ github.run_number }}"
-          draft: false
+          release_name: "Release v-1-1-${{ github.run_number }}"
+          draft: true
           prerelease: false
 
       # Upload zipped executable to the release
