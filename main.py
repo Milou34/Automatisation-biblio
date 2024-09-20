@@ -92,4 +92,4 @@ def main(folder_source):
 # os.makedirs(folder_source, exist_ok=True)
 
 # Lancer la conversion XML vers Excel
-main("C:\\Users\\MarylouBERTIN\\OneDrive - Grive Environnement\\Bureau\\Test")
+main("C:\\Users\\MarylouBERTIN\\Documents\\Test")
