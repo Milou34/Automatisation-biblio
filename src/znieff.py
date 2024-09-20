@@ -124,21 +124,13 @@ def process_znieff(ws, root, current_row):
 
         for espece_row in root.findall(".//ESPECE_PROT_ROW"):
             current_row = process_esp_p(espece_row, ws, current_row, root)
-
-            # Fusionner les cellules pour les colonnes 'Code espèce', 'Nom scientifique', et 'Statut de déterminance'
-            # après l'ajout des lignes pour les espèces protégées
-            merge_groups(
-                ws, start_row_for_merge, current_row - 1, "D", "B"
-            )  # Fusionner les cellules de 'Statut de déterminance'
-            merge_groups(
-                ws, start_row_for_merge, current_row - 1, "C", "B"
-            )  # Fusionner les cellules de 'Nom scientifique'
-            merge_groups(
-                ws, start_row_for_merge, current_row - 1, "B", "B"
-            )  # Fusionner les cellules de 'Code espèce'
-            merge_groups(
-                ws, start_row_for_merge, current_row - 1, "A", "A"
-            )  # Fusionner les cellules de 'Groupe'
+            
+        # Fusionner les cellules pour les colonnes 'Code espèce', 'Nom scientifique', et 'Statut de déterminance' 
+        # après l'ajout des lignes pour les espèces protégées
+        merge_groups(ws, start_row_for_merge, current_row - 1, "A", "A")  # Fusionner les cellules de 'Groupe'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "D", "B")  # Fusionner les cellules de 'Statut de déterminance'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "C", "B")  # Fusionner les cellules de 'Nom scientifique'
+        merge_groups(ws, start_row_for_merge, current_row - 1, "B", "B")  # Fusionner les cellules de 'Code espèce'
     else:
         current_row = create_table(
             ws,
