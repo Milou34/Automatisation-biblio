@@ -10,7 +10,7 @@ on:
 
 jobs:
   build-release:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       # Checkout the repository
@@ -32,14 +32,12 @@ jobs:
       # Build the executable
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile main.py
+          pyinstaller --onefile --name bibliographie-zonage main.py
           
-      # Upload the executable as an artifact
-      - name: Upload executable
-        uses: actions/upload-artifact@v4
-        with:
-          name: my-executable
-          path: dist/main.exe
+      # Zip the main.exe file
+      - name: Zip main.exe
+        run: |
+          zip -j ./dist/bibliographie-zonage.zip ./dist/bibliographie-zonage.exe
       
       # Create GitHub Release
       - name: Create GitHub Release
@@ -53,13 +51,13 @@ jobs:
           draft: false
           prerelease: false
 
-      # Upload executable to the release
+      # Upload zipped executable to the release
       - name: Upload executable to release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/main.exe
-          asset_name: my-executable.zip
+          asset_path: ./dist/bibliographie-zonage.zip
+          asset_name: bibliographie-zonage.zip
           asset_content_type: application/zip
