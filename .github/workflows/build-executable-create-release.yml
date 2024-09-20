@@ -63,16 +63,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v-${{ github.ref }}"
-          release_name: "Release ${{ github.run_number }}-${{ github.ref }}"
+          tag_name: "v-${{ github.sha }}"
+          release_name: "Release ${{ github.run_number }}"
           draft: false
           prerelease: false
 
       # Upload executable to the release
       - name: Upload executable to release
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./my-executable.zip
           asset_name: my-executable.zip
-          asset_content_type: application/octet-stream
+          asset_content_type: application/zip
