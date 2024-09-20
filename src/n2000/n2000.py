@@ -1,4 +1,4 @@
-from src.utils import create_table
+from src.utils.utilsN2000 import create_table
 
 
 def process_n2000(ws, root, current_row):

@@ -1,9 +1,5 @@
 from optparse import Values
-from src.utilsZnieff import extract_info
-import xml.etree.ElementTree as ET
-from openpyxl import Workbook
-from openpyxl.styles import Font, Alignment
-from openpyxl.utils import get_column_letter
+from src.utils.utils import extract_info
 
 
 def process_esp_p(esp_row, ws, current_row, root):

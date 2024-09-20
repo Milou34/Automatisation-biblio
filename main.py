@@ -2,9 +2,9 @@ import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 import fnmatch
 import os
-from src.n2000 import process_n2000
-from src.utils import adjust_columns, close_excel_if_open
-from src.znieff import process_znieff
+from src.n2000.n2000 import process_n2000
+from src.utils.utils import adjust_columns, close_excel_if_open
+from src.znieff.znieff import process_znieff
 
 
 def main(folder_source):

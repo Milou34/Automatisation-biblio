@@ -1,4 +1,4 @@
-from src.utilsZnieff import extract_info
+from src.utils.utils import extract_info
 
 
 def process_esp_d(esp_row, ws, current_row):
