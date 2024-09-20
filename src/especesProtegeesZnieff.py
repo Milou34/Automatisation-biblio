@@ -1,5 +1,5 @@
 from optparse import Values
-from src.utils import extract_info
+from src.utilsZnieff import extract_info
 import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 from openpyxl.styles import Font, Alignment

@@ -1,7 +1,8 @@
-from src.especesDeterminantes import process_esp_d
-from src.especesProtegees import process_esp_p
-from src.habitats import process_habitats
-from src.utils import create_table, extract_info, merge_groups
+from src.especesDeterminantesZnieff import process_esp_d
+from src.especesProtegeesZnieff import process_esp_p
+from src.habitatsZnieff import process_habitats
+from src.utils import extract_info, merge_groups
+from src.utilsZnieff import create_table
 
 
 def process_znieff(ws, root, current_row):
