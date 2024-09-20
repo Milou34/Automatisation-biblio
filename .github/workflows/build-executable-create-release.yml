@@ -63,8 +63,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v${{ github.run_number }}-${{ github.sha }}"
-          release_name: "Release ${{ github.run_number }}-${{ github.sha }}"
+          tag_name: "v-${{ github.ref }}"
+          release_name: "Release ${{ github.run_number }}-${{ github.ref }}"
           draft: false
           prerelease: false
 
@@ -73,6 +73,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/main.exe
-          asset_name: my-executable.exe
+          asset_path: ./my-executable.zip
+          asset_name: my-executable.zip
           asset_content_type: application/octet-stream
