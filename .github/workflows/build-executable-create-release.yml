@@ -37,7 +37,7 @@ jobs:
       # Zip the main.exe file
       - name: Zip main.exe
         run: |
-          zip -j ./dist/bibliographie-zonage.zip ./dist/bibliographie-zonage.exe
+          zip -j ./dist/bibliographie-zonage.zip ./dist/bibliographie-zonage
       
       # Create GitHub Release
       - name: Create GitHub Release
