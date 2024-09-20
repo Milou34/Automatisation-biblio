@@ -64,7 +64,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "v-${{ github.sha }}"
-          release_name: "Release ${{ github.run_number }}"
+          release_name: "Release v-1-0-${{ github.run_number }}"
           draft: false
           prerelease: false
 
@@ -75,6 +75,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./my-executable.zip
+          asset_path: ./dist/my-executable.zip
           asset_name: my-executable.zip
           asset_content_type: application/zip
