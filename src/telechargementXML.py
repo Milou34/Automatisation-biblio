@@ -60,6 +60,7 @@ destination_folder = input(
 # Créer le dossier de destination s'il n'existe pas
 os.makedirs(destination_folder, exist_ok=True)
 
+
 # Saisie et validation des codes ZNIEFF
 def input_codes_znieff():
     while True:
@@ -118,9 +119,12 @@ def input_codes_n2000():
                     f"Code N2000 invalide : {code}. Assurez-vous qu'il commence par 'FR' suivi de 7 chiffres."
                 )
         else:
-            print("\nTous les codes N2000 sont valides ou aucun code N2000 n'a été saisi.")
+            print(
+                "\nTous les codes N2000 sont valides ou aucun code N2000 n'a été saisi."
+            )
             return valid_n2000_codes
-        
+
+
 valid_znieff_codes = input_codes_znieff()
 valid_n2000_codes = input_codes_n2000()
 

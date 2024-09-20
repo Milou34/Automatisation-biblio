@@ -1,5 +1,6 @@
 from src.utils import extract_info
 
+
 def process_habitats(typo_info_row, ws, current_row):
     """
     Traite les habitats à partir des balises TYPO_INFO_ROW et renvoie les valeurs des colonnes.
@@ -15,12 +16,12 @@ def process_habitats(typo_info_row, ws, current_row):
 
     # Définir les chemins des balises à extraire pour la source, la surface et la période d'observation
     tag_paths = [
-        ".//AUTEUR",     # Auteur
-        ".//PC_TYPO",    # Surface
-        ".//AN_I_OBS",   # Début période observation
-        ".//AN_S_OBS"    # Fin période observation
+        ".//AUTEUR",  # Auteur
+        ".//PC_TYPO",  # Surface
+        ".//AN_I_OBS",  # Début période observation
+        ".//AN_S_OBS",  # Fin période observation
     ]
-    
+
     # Utiliser extract_info pour extraire les données
     extracted_values = extract_info(typo_info_row, tag_paths)
 
@@ -45,10 +46,16 @@ def process_habitats(typo_info_row, ws, current_row):
 
         # Récupérer tout le texte de la balise LB_HAB sans les balises de mise en forme comme <em>
         lb_hab_element = typo_row.find(".//LB_HAB")
-        lb_hab = "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
-        
+        lb_hab = (
+            "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
+        )
+
         # Extraire LB_CODE et combiner avec LB_HAB
-        lb_code = typo_row.find(".//LB_CODE").text if typo_row.find(".//LB_CODE") is not None else ""
+        lb_code = (
+            typo_row.find(".//LB_CODE").text
+            if typo_row.find(".//LB_CODE") is not None
+            else ""
+        )
         lb_hab = lb_code + " " + lb_hab
 
         # Déterminer la colonne selon la valeur de LB_TYPO

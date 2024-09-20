@@ -6,7 +6,6 @@ import psutil
 import os
 
 
-
 def extract_info(root, tag_paths):
     """Extrait les valeurs des balises spécifiées depuis le XML et retourne une liste des valeurs en string.
 
@@ -69,11 +68,13 @@ def merge_groups(ws, start_row, end_row, merge_column, check_column):
 
     for row in range(start_row + 1, end_row + 1):
         current_value = ws[f"{check_column}{row}"].value
-        
+
         if current_value != previous_value:
             if row - 1 > merge_start_row:
                 # Fusionner les cellules de la colonne `merge_column` de la ligne merge_start_row à row-1
-                ws.merge_cells(f"{merge_column}{merge_start_row}:{merge_column}{row - 1}")
+                ws.merge_cells(
+                    f"{merge_column}{merge_start_row}:{merge_column}{row - 1}"
+                )
             # Réinitialiser la valeur de départ pour la prochaine fusion
             merge_start_row = row
             previous_value = current_value
@@ -85,9 +86,8 @@ def merge_groups(ws, start_row, end_row, merge_column, check_column):
     # Optionnel: Ajuster les alignements des cellules fusionnées
     for row in range(start_row, end_row + 1):
         cell = ws[f"{merge_column}{row}"]
-        cell.alignment = cell.alignment.copy(horizontal='center')
+        cell.alignment = cell.alignment.copy(horizontal="center")
 
-        
 
 def adjust_columns(wb):
     """
@@ -131,28 +131,34 @@ def adjust_columns(wb):
             for cell in row:
                 cell.alignment = Alignment(wrap_text=True, vertical="center")
 
+
 def close_excel_if_open(file_path):
     """
     Vérifie si un fichier Excel est ouvert en recherchant les processus liés à Excel.
-    
+
     Args:
         file_path (str): Le chemin du fichier à vérifier.
-        
+
     Returns:
         bool: True si le fichier est ouvert, sinon False.
     """
     file_name = os.path.basename(file_path)
-    
-    for proc in psutil.process_iter(['pid', 'name']):
+
+    for proc in psutil.process_iter(["pid", "name"]):
         try:
-            if proc.info['name'].lower() in ['excel.exe', 'excel'] or 'EXCEL' in proc.info['name'].upper():
+            if (
+                proc.info["name"].lower() in ["excel.exe", "excel"]
+                or "EXCEL" in proc.info["name"].upper()
+            ):
                 for open_file in proc.open_files():
                     if file_name in open_file.path:
-                        print(f"Le fichier {file_name} est ouvert. Tentative de fermeture...")
+                        print(
+                            f"Le fichier {file_name} est ouvert. Tentative de fermeture..."
+                        )
                         proc.terminate()
                         proc.wait()  # Assure que le processus est bien terminé
                         print(f"Fermeture du fichier {file_name} réussie.")
                         return
-                    
+
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue
