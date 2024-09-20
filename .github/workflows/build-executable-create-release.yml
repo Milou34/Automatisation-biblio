@@ -56,6 +56,9 @@ jobs:
         with:
           name: my-executable
 
+      - name: List stuff
+        run: ls -la
+
       # Create GitHub Release
       - name: Create GitHub Release
         id: create_release
