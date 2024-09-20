@@ -33,11 +33,6 @@ jobs:
       - name: Build executable with PyInstaller
         run: |
           pyinstaller --onefile --name bibliographie-zonage main.py
-          
-      # Zip the main.exe file
-      - name: Zip main.exe
-        run: |
-          zip -j ./dist/bibliographie-zonage.zip ./dist/bibliographie-zonage
       
       # Create GitHub Release
       - name: Create GitHub Release
@@ -48,7 +43,7 @@ jobs:
         with:
           tag_name: "v-${{ github.sha }}"
           release_name: "Release v-1-1-${{ github.run_number }}"
-          draft: true
+          draft: false
           prerelease: false
 
       # Upload zipped executable to the release
@@ -58,6 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/bibliographie-zonage.zip
-          asset_name: bibliographie-zonage.zip
-          asset_content_type: application/zip
+          asset_path: ./dist/bibliographie-zonage.exe
+          asset_name: bibliographie-zonage.exe
+          asset_content_type: application/octet-stream
