@@ -1,4 +1,4 @@
-from openpyxl.styles import Alignment
+from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 import psutil
 import os
@@ -23,6 +23,31 @@ def extract_info(root, tag_paths):
         )
     return values
 
+
+def create_table(ws, title, headers, start_row):
+    """Crée un tableau avec un titre et des en-têtes stylisés dans la feuille de calcul."""
+    # Ajouter le titre du tableau et le mettre en gras
+    ws.append([title])
+    title_cell = ws.cell(row=start_row, column=1)
+    title_cell.font = Font(bold=True, size=16)
+
+    # Fusionner les cellules du titre sur la largeur des en-têtes
+    ws.merge_cells(
+        start_row=start_row, start_column=1, end_row=start_row, end_column=len(headers)
+    )
+    title_cell.alignment = Alignment(horizontal="center", vertical='center')
+
+    # Ajouter les en-têtes et les mettre en gras et centrés
+    header_row = start_row + 1
+    ws.append(headers)
+
+    for col_num, header in enumerate(headers, start=1):
+        cell = ws.cell(row=header_row, column=col_num)
+        cell.font = Font(bold=True)  # Mettre en gras
+        cell.alignment = Alignment(horizontal="center", vertical='center')  # Centrer horizontalement
+
+    # Retourner la ligne suivante après le tableau
+    return start_row + 2
 
 
 def merge_groups(ws, start_row, end_row, merge_column, check_column):
@@ -100,10 +125,12 @@ def adjust_columns(wb):
                 10, adjusted_width
             )  # Largeur minimale de 10 pour éviter trop de réduction
 
-        # Activer le retour à la ligne automatique dans toutes les cellules
+        # Activer le retour à la ligne automatique et centrer horizontalement dans toutes les cellules
         for row in ws.iter_rows():
             for cell in row:
-                cell.alignment = Alignment(wrap_text=True, vertical="center")
+                # Vérifier si la cellule n'est pas en gras
+                if not (cell.font.bold):
+                    cell.alignment = Alignment(wrap_text=True, vertical='center')
 
 
 def close_excel_if_open(file_path):

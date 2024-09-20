@@ -45,19 +45,19 @@ def process_esp_p(esp_row, ws, current_row, root):
         statut_txt = "Autre"
 
     # Extraction de la citation
-    citation = root.find(".//SHORT_CITATION")
+    citation = esp_row.find(".//SHORT_CITATION")
     citation = (
         citation.text if citation is not None and citation.text is not None else ""
     )
 
     # Extraction de la citation
-    url = root.find(".//URL")
+    url = esp_row.find(".//URL")
     url = url.text if url is not None and url.text is not None else ""
 
     # Insérer le lien hypertexte avec la citation comme texte cliquable
     if url:
         # Utiliser la fonction HYPERLINK pour faire de la citation un lien cliquable
-        citation = f'=HYPERLINK("{url}", "{citation}")'
+        citation_text = f'=HYPERLINK("{url}", "{citation}")'
 
     # Créer la liste des valeurs à ajouter à la feuille Excel
     espece_values = [
@@ -65,7 +65,7 @@ def process_esp_p(esp_row, ws, current_row, root):
         code_esp,
         nom_esp,
         statut_txt,
-        citation,
+        citation_text,
     ]
 
     # Ajouter les données à la feuille Excel
