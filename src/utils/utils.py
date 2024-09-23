@@ -141,7 +141,7 @@ def adjust_columns(wb):
             for cell in row:
                 # Vérifier si la cellule n'est pas en gras
                 if not (cell.font.bold):
-                    cell.alignment = Alignment(wrap_text=True, vertical='center')
+                    cell.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center')
 
 
 def close_excel_if_open(file_path):
@@ -176,73 +176,73 @@ def close_excel_if_open(file_path):
             continue
 
 
-def extract_tables(wb):
+def apply_borders(wb):
     """
-    Renvoie une liste de listes contenant les cellules qui constituent chaque tableau
-    dans une feuille Excel, séparés par des lignes vides.
+    Applique des bordures intérieures et extérieures aux tableaux présents dans la feuille de calcul,
+    en ignorant les lignes vides qui séparent les tableaux.
     
-    :param ws: La feuille de calcul (Worksheet)
-    :return: Une liste de listes de cellules pour chaque tableau.
+    :param wb: Le classeur (Workbook)
     """
-    all_tables = []
-
-    for ws in wb:
-        current_table = []
-        # Itérer sur les lignes de la feuille
+    for ws in wb.worksheets:  # Itérer sur chaque feuille de calcul
+        start_row = None  # Pour stocker le début du tableau
         for row in ws.iter_rows():
             # Vérifier si la ligne est vide
             if all(cell.value is None for cell in row):
-                # Si on a une table en cours, l'ajouter
-                if current_table:
-                    all_tables.append(current_table)
-                    current_table = []  # Réinitialiser pour le prochain tableau
+                # Si on a atteint une ligne vide et qu'un tableau était en cours
+                if start_row is not None:
+                    # Appliquer les bordures du tableau
+                    apply_borders_range(ws, start_row, row[0].row - 1)
+                    start_row = None  # Réinitialiser le début du tableau
             else:
-                # Ajouter la ligne non vide à la table en cours
-                current_table.append([cell.value for cell in row])
+                # Si nous sommes dans un tableau, définir le début
+                if start_row is None:
+                    start_row = row[0].row
 
-        # Ajouter le dernier tableau s'il y en a un
-        if current_table:
-            all_tables.append(current_table)
-    return all_tables
-                    
+        # Gérer le dernier tableau s'il n'est pas suivi d'une ligne vide
+        if start_row is not None:
+            apply_borders_range(ws, start_row, ws.max_row)  # Corriger ici
 
-def apply_borders_to_tables(ws, tables):
+
+def apply_borders_range(ws, start_row, end_row):
     """
-    Applique des bordures intérieures et extérieures à chaque tableau dans la liste de tableaux.
+    Applique les bordures à la plage de cellules définie par start_row et end_row.
     
     :param ws: La feuille de calcul (Worksheet)
-    :param tables: Liste de listes contenant les cellules de chaque tableau.
+    :param start_row: Ligne de début du tableau
+    :param end_row: Ligne de fin du tableau
     """
-    thin_border = Border(left=Side(style='thin'), 
-                         right=Side(style='thin'), 
-                         top=Side(style='thin'), 
-                         bottom=Side(style='thin'))
+    # Définir le style des bordures
+    thin = Side(border_style="thin", color="000000")  # Bordure fine
+    border = Border(left=thin, right=thin, top=thin, bottom=thin)
+    
+    # Déterminer la première et la dernière colonne contenant des valeurs
+    min_col = ws.min_column  # On commence par la première colonne
+    max_col = 0  # On va trouver la dernière colonne avec des valeurs
 
-    for table in tables:
-        # Déterminer les limites du tableau
-        min_row = min(cell.row for row in table for cell in row if cell is not None)
-        max_row = max(cell.row for row in table for cell in row if cell is not None)
-        min_col = min(cell.column for row in table for cell in row if cell is not None)
-        max_col = max(cell.column for row in table for cell in row if cell is not None)
+    # Trouver la dernière colonne avec des valeurs dans le tableau
+    for row in range(start_row, end_row + 1):
+        for col in range(1, ws.max_column + 1):  # Vérifier jusqu'à la dernière colonne de la feuille
+            if ws.cell(row=row, column=col).value is not None:
+                max_col = max(max_col, col)  # Mettre à jour max_col si on trouve une valeur
 
-        # Appliquer les bordures extérieures
-        for row in range(min_row, max_row + 1):
-            for col in range(min_col, max_col + 1):
-                cell = ws.cell(row=row, column=col)
-                if row == min_row:  # Bordure supérieure
-                    cell.border = Border(top=thin_border.top)
-                if row == max_row:  # Bordure inférieure
-                    cell.border = Border(bottom=thin_border.bottom)
-                if col == min_col:  # Bordure gauche
-                    cell.border = Border(left=thin_border.left)
-                if col == max_col:  # Bordure droite
-                    cell.border = Border(right=thin_border.right)
+    # Appliquer des bordures intérieures
+    for row in range(start_row, end_row + 1):
+        for col in range(min_col, max_col + 1):
+            cell = ws.cell(row=row, column=col)
+            cell.border = Border(left=Side(style='thin'), 
+                                 right=Side(style='thin'), 
+                                 top=Side(style='thin'), 
+                                 bottom=Side(style='thin'))
 
-        # Appliquer les bordures intérieures
-        for row in range(min_row, max_row + 1):
-            for col in range(min_col, max_col + 1):
-                cell = ws.cell(row=row, column=col)
-                if col < max_col:  # Bordure droite interne
-                    cell.border = Border(right=thin_border.right)
-                if row < max_row:  # Bordure inférieure interne
-                    cell.border = Border(bottom=thin_border.bottom)
+    # Appliquer bordures extérieures seulement à la première et dernière ligne et colonne
+    for col in range(min_col, max_col + 1):
+        # Bordure supérieure
+        ws.cell(row=start_row, column=col).border = ws.cell(row=start_row, column=col).border + Border(top=Side(style='thin'))
+        # Bordure inférieure
+        ws.cell(row=end_row, column=col).border = ws.cell(row=end_row, column=col).border + Border(bottom=Side(style='thin'))
+
+    for row in range(start_row, end_row + 1):
+        # Bordure gauche
+        ws.cell(row=row, column=min_col).border = ws.cell(row=row, column=min_col).border + Border(left=Side(style='thin'))
+        # Bordure droite
+        ws.cell(row=row, column=max_col).border = ws.cell(row=row, column=max_col).border + Border(right=Side(style='thin'))

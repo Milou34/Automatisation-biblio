@@ -3,7 +3,7 @@ from openpyxl import Workbook
 import fnmatch
 import os
 from src.n2000.n2000 import process_n2000
-from src.utils.utils import adjust_columns, apply_borders_to_tables, close_excel_if_open, extract_tables
+from src.utils.utils import adjust_columns, apply_borders, close_excel_if_open
 from src.znieff.znieff import process_znieff
 
 
@@ -58,10 +58,11 @@ def main(folder_source):
                     ws = ws_n2000
                     current_row = process_n2000(ws, root, current_row_n2000)
 
-                # Ajoute une ligne vide entre chaque fichier XML
+                # Ajoute 2 lignes vides entre chaque fichier XML
+                ws.append([])
                 ws.append([])
                 # Mettre à jour la ligne après avoir ajouté une ligne vide
-                current_row += 1
+                current_row += 2
 
                 # Mettre à jour la ligne courante pour le type de ZNIEFF
                 if root.tag == "ZNIEFF":
@@ -78,7 +79,7 @@ def main(folder_source):
 
     # Sauvegarder le fichier Excel
     adjust_columns(wb)
-    extract_tables(wb)
+    apply_borders(wb)
     wb.save(os.path.join(folder_source, "Récap.xlsx"))
 
     # Ouvrir le fichier Excel généré
