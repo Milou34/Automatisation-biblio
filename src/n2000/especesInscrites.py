@@ -33,13 +33,9 @@ def process_especes_inscrites(species_row, ws, current_row):
 
     # Utiliser extract_info pour extraire les données
     extracted_values = extract_info(species_row, tag_paths)
-    # Traiter les valeurs extraites
-    extracted_values[1] = int(extracted_values[1]) if extracted_values[1] else ""
-    extracted_values[4] = int(extracted_values[4]) if extracted_values[4] else ""
-    extracted_values[5] = int(extracted_values[5]) if extracted_values[5] else ""
-        
+    
     ws.append(extracted_values)
-    current_row +=1
+    current_row += 1
     
     return current_row
     

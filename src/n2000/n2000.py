@@ -20,11 +20,7 @@ def process_n2000(ws, root, current_row):
     # Extraction des données depuis le fichier XML
     extracted_value = extract_info(root, tag_paths)
     # Convertir les valeurs numériques pour l'affichage correct
-    
-    extracted_value[3] = float(
-        extracted_value[3].replace(",", ".")
-    )  # Conversion de 'Surface'
-    
+
     type_zone = extracted_value[0]
     if type_zone == 'A':
         extracted_value[0] = "p-SIC"

@@ -31,7 +31,6 @@ def process_esp_p(esp_row, ws, current_row, root):
 
     # Gestion du code espèce (convertir en int si possible)
     code_esp = extracted_values[1]
-    code_esp = int(code_esp) if code_esp else ""
 
     nom_esp = extracted_values[2]
 

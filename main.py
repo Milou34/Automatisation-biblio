@@ -3,7 +3,7 @@ from openpyxl import Workbook
 import fnmatch
 import os
 from src.n2000.n2000 import process_n2000
-from src.utils.utils import adjust_columns, close_excel_if_open
+from src.utils.utils import adjust_columns, apply_borders_to_tables, close_excel_if_open, extract_tables
 from src.znieff.znieff import process_znieff
 
 
@@ -78,6 +78,7 @@ def main(folder_source):
 
     # Sauvegarder le fichier Excel
     adjust_columns(wb)
+    extract_tables(wb)
     wb.save(os.path.join(folder_source, "Récap.xlsx"))
 
     # Ouvrir le fichier Excel généré

@@ -29,16 +29,25 @@ def process_habitats(typo_info_row, ws, current_row):
     source_text = extracted_values[0]
 
     # Gestion de la surface (convertir en float si disponible)
-    surface_text = extracted_values[1]
-    surface_float = float(surface_text.replace(",", ".")) if surface_text else ""
+    surface = extracted_values[1]
 
     # Combiner la période d'observation
-    observation_I_text = extracted_values[2]
-    observation_S_text = extracted_values[3]
-    observation = observation_I_text + " - " + observation_S_text
-
+    observation_I_text = str(extracted_values[2])
+    observation_S_text = str(extracted_values[3])
+    if observation_I_text == "-":
+        observation_I_text = ""
+    elif observation_S_text == "-":
+        observation_S_text = ""
+    observation = (observation_I_text + "-" + observation_S_text)
+    if observation == "--":
+        observation = "-"
+    elif len(observation)<6:
+        observation = (observation_I_text + observation_S_text)
+    else:
+        observation = observation
+        
     # Initialiser la liste des valeurs d'habitats
-    habitats_values = ["", "", "", source_text, surface_float, observation]
+    habitats_values = ["", "", "", source_text, surface, observation]
 
     # Parcourir les balises TYPO_ROW pour extraire les informations supplémentaires
     for typo_row in typo_info_row.findall(".//TYPO_ROW"):
@@ -61,9 +70,15 @@ def process_habitats(typo_info_row, ws, current_row):
         # Déterminer la colonne selon la valeur de LB_TYPO
         if lb_typo == "EUNIS 2012":
             habitats_values[0] = lb_hab
+            habitats_values[1] = "-"
+            habitats_values[2] = "-"
         elif lb_typo == "CORINE biotopes":
+            habitats_values[0] = "-"
             habitats_values[1] = lb_hab
+            habitats_values[2] = "-"
         elif lb_typo == "Habitats d'intérêt communautaire (HIC)":
+            habitats_values[0] = "-"
+            habitats_values[1] = "-"
             habitats_values[2] = lb_hab
 
     # Ajouter les données à la feuille Excel

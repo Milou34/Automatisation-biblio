@@ -20,10 +20,6 @@ def process_znieff(ws, root, current_row):
     # Extraction des données depuis le fichier XML
     infos_value = extract_info(root, tag_paths)
     # Convertir les valeurs numériques pour l'affichage correct
-    infos_value[2] = float(
-        infos_value[2].replace(",", ".")
-    )  # Conversion de 'Surface totale ZNIEFF'
-    infos_value[0] = int(infos_value[0])  # Conversion de 'ID national'
     ws.append(infos_value)
     ws.append([])
     current_row += 2  # Mettre à jour la ligne après avoir ajouté le premier tableau

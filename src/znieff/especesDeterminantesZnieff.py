@@ -32,72 +32,43 @@ def process_esp_d(esp_row, ws, current_row):
     # Utiliser extract_info pour extraire les valeurs
     extracted_values = extract_info(esp_row, tag_paths)
 
-    # Traiter les valeurs extraites
-    groupe = extracted_values[0]
-
-    # Gestion du code espèce (convertir en int si possible)
-    code_esp = extracted_values[1]
-    code_esp = int(code_esp) if code_esp else ""
-
-    nom_esp = extracted_values[2]
-    nom_vern = extracted_values[3]
-
     # Traiter le statut biologique
-    statut_bio_esp = extracted_values[4]
-    if statut_bio_esp == "R":
-        statut_bio_esp_txt = "Reproduction certaine ou probable"
-    elif statut_bio_esp == "RI":
-        statut_bio_esp_txt = "Reproduction indéterminée"
+    if extracted_values[4] == "R":
+        extracted_values[4] = "Reproduction certaine ou probable"
+    elif extracted_values[4] == "RI":
+        extracted_values[4] = "Reproduction indéterminée"
     else:
-        statut_bio_esp_txt = ""
-
-    source = extracted_values[5]
+        extracted_values[4] = "-"
 
     # Traiter le degré d'abondance
-    deg_abd = extracted_values[6]
-    if deg_abd == "A":
-        deg_abd_txt = "Fort"
-    elif deg_abd == "B":
-        deg_abd_txt = "Moyen"
-    elif deg_abd == "C":
-        deg_abd_txt = "Faible"
+    if extracted_values[6] == "A":
+        extracted_values[6] = "Fort"
+    elif extracted_values[6] == "B":
+        extracted_values[6] = "Moyen"
+    elif extracted_values[6] == "C":
+        extracted_values[6] = "Faible"
     else:
-        deg_abd_txt = ""
-
-    # Gestion de l'effectif inférieur
-    eff_I = extracted_values[7]
-    eff_I = int(eff_I) if eff_I else ""
-
-    # Gestion de l'effectif supérieur
-    eff_S = extracted_values[8]
-    eff_S = int(eff_S) if eff_S else ""
+        extracted_values[6] = "-"
 
     # Combiner la période d'observation
-    observation_I_text = extracted_values[9]
-    observation_S_text = extracted_values[10]
-    observation = (
-        observation_I_text + " - " + observation_S_text
-        if observation_I_text or observation_S_text
-        else ""
-    )
-
-    # Créer la liste des valeurs à ajouter à la feuille Excel
-    espece_values = [
-        groupe,
-        code_esp,
-        nom_esp,
-        nom_vern,
-        statut_bio_esp_txt,
-        source,
-        deg_abd_txt,
-        eff_I,
-        eff_S,
-        observation,
-    ]
+    observation_I_text = str(extracted_values[9])
+    observation_S_text = str(extracted_values[10])
+    if observation_I_text == "-":
+        observation_I_text = ""
+    elif observation_S_text == "-":
+        observation_S_text = ""
+    observation = (observation_I_text + "-" + observation_S_text)
+    if observation == "--":
+        extracted_values[9] = "-"
+    elif len(observation)<6:
+        extracted_values[9] = (observation_I_text + observation_S_text)
+    else:
+        extracted_values[9] = observation
+    extracted_values.pop(10)
 
     # Ajouter les données à la feuille Excel
-    ws.append(espece_values)
-
+    ws.append(extracted_values)
+    
     # Mettre à jour current_row après avoir ajouté la ligne
     current_row += 1
 

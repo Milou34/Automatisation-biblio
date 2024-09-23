@@ -33,64 +33,44 @@ def process_especes_autres(species_other_row, ws, current_row):
 
     # Utiliser extract_info pour extraire les données
     extracted_values = extract_info(species_other_row, tag_paths)
-    # Traiter les valeurs extraites
-    groupe = extracted_values[0] if extracted_values[0] else ""
-    nom = extracted_values[1] if extracted_values[1] else ""
-    min = int(extracted_values[2]) if extracted_values[2] else ""
-    max = int(extracted_values[3]) if extracted_values[3] else ""
-    unit = extracted_values[4] if extracted_values[4] else ""
-    cat = extracted_values[5] if extracted_values[5] else ""
     
-    annexe_IV = extracted_values[6]
-    if annexe_IV == 'true':
-        annexe_IV_text = "X"
+    # Traite pour l'Annexe IV
+    if extracted_values[6] == 'true':
+        extracted_values[6] = "X"
     else:
-        annexe_IV_text = ""
+        extracted_values[6] = "-"
+    
+    # Traite pour l'Annexe V
+    if extracted_values[7] == 'true':
+        extracted_values[7] = "X"
+    else:
+        extracted_values[7] = "-"
+    
+    # Traite pour la liste rouge nationale
+    if extracted_values[8] == 'true':
+        extracted_values[8] = "X"
+    else:
+        extracted_values[8] = "-"
+    
+    # Traite pour les espèces endémiques
+    if extracted_values[9] == 'true':
+        extracted_values[9] = "X"
+    else:
+        extracted_values[9] = "-"
         
-    annexe_V = extracted_values[7]
-    if annexe_V == 'true':
-        annexe_V_text = "X"
+    # Traite pour les conventions internationales
+    if extracted_values[10] == 'true':
+        extracted_values[10] = "X"
     else:
-        annexe_V_text = ""
+        extracted_values[10] = "-"    
     
-    a = extracted_values[8]
-    if a == 'true':
-        a_text = "X"
+    # Traite pour les autres raisons
+    if extracted_values[11] == 'true':
+        extracted_values[11] = "X"
     else:
-        a_text = ""
-    
-    b = extracted_values[9]
-    if b == 'true':
-        b_text = "X"
-    else:
-        b_text = ""
-        
-    c = extracted_values[10]
-    if c == 'true':
-        c_text = "X"
-    else:
-        c_text = ""    
-    
-    d = extracted_values[11]
-    if d == 'true':
-        d_text = "X"
-    else:
-        d_text = ""    
-    
-    especes_autres_values = [groupe, 
-                             nom, 
-                             min, 
-                             max, 
-                             unit, 
-                             cat, 
-                             annexe_IV_text, 
-                             annexe_V_text, 
-                             a_text, 
-                             b_text, 
-                             c_text, 
-                             d_text]
-    
-    ws.append(especes_autres_values)
+        extracted_values[11] = "-"    
+
+    ws.append(extracted_values)
     current_row += 1
     
     return current_row
