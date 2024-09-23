@@ -16,10 +16,10 @@ def process_habitats(typo_info_row, ws, current_row):
 
     # Définir les chemins des balises à extraire pour la source, la surface et la période d'observation
     tag_paths = [
-        ".//AUTEUR",  # Auteur
-        ".//PC_TYPO",  # Surface
-        ".//AN_I_OBS",  # Début période observation
-        ".//AN_S_OBS",  # Fin période observation
+        ".//AUTEUR",    # Auteur (str)
+        ".//PC_TYPO",   # Surface (float)
+        ".//AN_I_OBS",  # Début période observation (str)
+        ".//AN_S_OBS",  # Fin période observation (str)
     ]
 
     # Utiliser extract_info pour extraire les données

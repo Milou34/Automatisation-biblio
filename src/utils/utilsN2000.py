@@ -77,11 +77,6 @@ def create_table_especes_inscrites(ws, current_row):
     
     :param ws: La feuille de calcul (Worksheet)
     :param current_row: La ligne actuelle où l'en-tête doit être inséré
-    :param main_title: Le titre principal du tableau
-    :param titles_col_A_C: Une liste de titres pour les colonnes A à C
-    :param title_D_I: Le titre pour les colonnes D à I (fusion horizontale)
-    :param title_G_J: Le titre pour les colonnes G à J (fusion verticale)
-    :param title_K_M: Le titre pour les colonnes K à M (fusion horizontale)
     """
     
     # Ajouter le titre principal et le fusionner de A à J (colonnes 1 à 10)
@@ -165,6 +160,106 @@ def create_table_especes_inscrites(ws, current_row):
     for col in range(11, 14):  # Colonnes K (11) à M (13)
         ws.cell(row=current_row + 2, column=col, value=sub_titles_K_M[col - 11]).font = Font(bold=True)
         ws.cell(row=current_row + 2, column=col).alignment = Alignment(horizontal="center")
+
+    # Retourner la nouvelle ligne pour la suite
+    return current_row + 3
+
+
+def create_table_especes_autres(ws, current_row):
+    """
+    Crée un en-tête de tableau avec des colonnes fusionnées et des titres en gras et centrés.
+    
+    :param ws: La feuille de calcul (Worksheet)
+    :param current_row: La ligne actuelle où l'en-tête doit être inséré
+    """
+    
+    # Ajouter le titre principal du tableau et le fusionner de A à L (colonnes 1 à 12)
+    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=12)
+    title_cell = ws.cell(row=current_row, column=1)
+    title_cell.value = "Autres espèces importantes de faune et de flore"
+    title_cell.font = Font(bold=True, size=16)
+    title_cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Passer à la ligne suivante pour l'en-tête des colonnes
+    current_row += 1
+
+    # Fusionner les cellules de A à B sur la première ligne
+    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=2)
+    title_cell_A_B = ws.cell(row=current_row, column=1)
+    title_cell_A_B.value = "Espèce"
+    title_cell_A_B.font = Font(bold=True)
+    title_cell_A_B.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les colonnes A et B verticalement sur les deux lignes suivantes (ligne 2 et 3)
+    titles_A_B = ["Groupe", "Nom scientifique"]
+    for col in range(1, 3):  # Colonnes A (1) et B (2)
+        ws.merge_cells(start_row=current_row + 1, start_column=col, end_row=current_row + 2, end_column=col)
+        cell = ws.cell(row=current_row + 1, column=col)
+        cell.value = titles_A_B[col - 1]
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les cellules de C à F sur la première ligne
+    ws.merge_cells(start_row=current_row, start_column=3, end_row=current_row, end_column=6)
+    title_cell_C_F = ws.cell(row=current_row, column=3)
+    title_cell_C_F.value = "Population présente sur le site"
+    title_cell_C_F.font = Font(bold=True)
+    title_cell_C_F.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les colonnes C et D horizontalement sur la deuxième ligne
+    ws.merge_cells(start_row=current_row + 1, start_column=3, end_row=current_row + 1, end_column=4)
+    title_cell_C_D = ws.cell(row=current_row + 1, column=3)
+    title_cell_C_D.value = "Taille"
+    title_cell_C_D.font = Font(bold=True)
+    title_cell_C_D.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Titres dans la troisième ligne des colonnes C et D
+    sub_titles_C_D = ["Min", "Max"]
+    for col in range(3, 5):  # Colonnes C (3) et D (4)
+        ws.cell(row=current_row + 2, column=col, value=sub_titles_C_D[col - 3]).font = Font(bold=True)
+        ws.cell(row=current_row + 2, column=col).alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusion verticale des colonnes E et F sur les deux lignes suivantes
+    sub_titles_E_F = ["Unité", "Catégorie (C|R|V|P)"]
+    for col in range(5, 7):  # Colonnes E (5) et F (6)
+        ws.merge_cells(start_row=current_row + 1, start_column=col, end_row=current_row + 2, end_column=col)
+        cell = ws.cell(row=current_row + 1, column=col)
+        cell.value = sub_titles_E_F[col - 5]
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les colonnes G à L sur la première ligne
+    ws.merge_cells(start_row=current_row, start_column=7, end_row=current_row, end_column=12)
+    title_cell_G_L = ws.cell(row=current_row, column=7)
+    title_cell_G_L.value = "Motivation"
+    title_cell_G_L.font = Font(bold=True)
+    title_cell_G_L.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les colonnes G et H horizontalement sur la deuxième ligne
+    ws.merge_cells(start_row=current_row + 1, start_column=7, end_row=current_row + 1, end_column=8)
+    title_cell_G_H = ws.cell(row=current_row + 1, column=7)
+    title_cell_G_H.value = "Annexe Directive Habitat"
+    title_cell_G_H.font = Font(bold=True)
+    title_cell_G_H.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Titres dans la troisième ligne des colonnes G et H
+    sub_titles_G_H = ["IV", "V"]
+    for col in range(7, 9):  # Colonnes G (7) et H (8)
+        ws.cell(row=current_row + 2, column=col, value=sub_titles_G_H[col - 7]).font = Font(bold=True)
+        ws.cell(row=current_row + 2, column=col).alignment = Alignment(horizontal="center", vertical="center")
+
+    # Fusionner les colonnes I à L horizontalement sur la deuxième ligne
+    ws.merge_cells(start_row=current_row + 1, start_column=9, end_row=current_row + 1, end_column=12)
+    title_cell_I_L = ws.cell(row=current_row + 1, column=9)
+    title_cell_I_L.value = "Autres catégories"
+    title_cell_I_L.font = Font(bold=True)
+    title_cell_I_L.alignment = Alignment(horizontal="center", vertical="center")
+
+    # Titres dans la troisième ligne des colonnes I à L
+    sub_titles_I_L = ["A", "B", "C", "D"]
+    for col in range(9, 13):  # Colonnes I (9) à L (12)
+        ws.cell(row=current_row + 2, column=col, value=sub_titles_I_L[col - 9]).font = Font(bold=True)
+        ws.cell(row=current_row + 2, column=col).alignment = Alignment(horizontal="center", vertical="center")
 
     # Retourner la nouvelle ligne pour la suite
     return current_row + 3

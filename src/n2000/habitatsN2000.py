@@ -16,17 +16,17 @@ def process_habitats_n2000(habit1_row, ws, current_row):
 
     # Définir les chemins des balises à extraire pour la source, la surface et la période d'observation
     tag_paths = [
-        ".//CD_UE",  # Code habitat
-        ".//LB_HABDH_FR",  # Nom habitat
-        ".//PF",  
-        ".//AREA",      # Surface
-        ".//COVER",     # % surface
-        ".//CAVE",       # Nb de grottes
-        ".//QUALITY",   # Qualité des observations        
-        ".//REPRESENT", # Représentativité
-        ".//REL_SURF",   # Surface relative
-        ".//CONSERVE",  # Conservation
-        ".//GLOBAL",    # Evaluation globale
+        ".//CD_UE",             # Code habitat (int)
+        ".//LB_HABDH_FR",       # Nom habitat (str)
+        ".//PF",                # Forme prioritaire de l'habitat (boolean)
+        ".//AREA",              # Surface (float)
+        ".//COVER",             # % surface (float)
+        ".//CAVE",              # Nb de grottes (int)
+        ".//QUALITY",           # Qualité des observations (str)     
+        ".//REPRESENT",         # Représentativité (str)
+        ".//REL_SURF",          # Surface relative (str)
+        ".//CONSERVE",          # Conservation (str)
+        ".//GLOBAL",            # Evaluation globale (str)
     ]
 
     # Utiliser extract_info pour extraire les données

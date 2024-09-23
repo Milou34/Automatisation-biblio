@@ -16,17 +16,17 @@ def process_esp_d(esp_row, ws, current_row):
 
     # Définir les chemins des balises XML à extraire
     tag_paths = [
-        ".//GROUPE",  # Groupe
-        ".//CD_NOM",  # Code espèce
-        ".//NOM_COMPLET",  # Nom scientifique
-        ".//NOM_VERN",  # Nom vernaculaire
-        ".//STATUT_BIO_ESP",  # Statut biologique
-        ".//AUTEUR",  # Source
-        ".//CD_ABOND",  # Degré d'abondance
-        ".//NB_I_ABOND",  # Effectif inférieur estimé
-        ".//NB_S_ABOND",  # Effectif supérieur estimé
-        ".//AN_I_OBS",  # Année d'observation initiale
-        ".//AN_S_OBS",  # Année d'observation finale
+        ".//GROUPE",            # Groupe (str)
+        ".//CD_NOM",            # Code espèce (int)
+        ".//NOM_COMPLET",       # Nom scientifique (str)
+        ".//NOM_VERN",          # Nom vernaculaire (str)
+        ".//STATUT_BIO_ESP",    # Statut biologique (str)
+        ".//AUTEUR",            # Source (str)
+        ".//CD_ABOND",          # Degré d'abondance (str)
+        ".//NB_I_ABOND",        # Effectif inférieur estimé (int)
+        ".//NB_S_ABOND",        # Effectif supérieur estimé (int)
+        ".//AN_I_OBS",          # Année d'observation initiale (str)
+        ".//AN_S_OBS",          # Année d'observation finale (str)
     ]
 
     # Utiliser extract_info pour extraire les valeurs

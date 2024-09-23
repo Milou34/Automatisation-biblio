@@ -17,10 +17,10 @@ def process_esp_p(esp_row, ws, current_row, root):
 
     # Définir les chemins des balises XML à extraire
     tag_paths = [
-        ".//GROUPE",  # Groupe
-        ".//CD_NOM",  # Code espèce
-        ".//NOM_COMPLET",  # Nom scientifique
-        ".//FG_ESP",  # Source
+        ".//GROUPE",        # Groupe (str)
+        ".//CD_NOM",        # Code espèce (int)
+        ".//NOM_COMPLET",   # Nom scientifique (str)
+        ".//FG_ESP",        # Source (str)
     ]
 
     # Utiliser extract_info pour extraire les valeurs

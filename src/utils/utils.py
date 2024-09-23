@@ -33,9 +33,9 @@ def create_table(ws, title, headers, start_row):
 
     # Fusionner les cellules du titre sur la largeur des en-têtes
     ws.merge_cells(
-        start_row=start_row, start_column=1, end_row=start_row, end_column=len(headers)
+        start_row=start_row, start_column=1, end_row=start_row, end_column=max(2, len(headers))
     )
-    title_cell.alignment = Alignment(horizontal="center", vertical='center')
+    title_cell.alignment = Alignment(wrap_text=True, horizontal="center", vertical='center')
 
     # Ajouter les en-têtes et les mettre en gras et centrés
     header_row = start_row + 1

@@ -1,5 +1,7 @@
+from src.n2000.especesAutres import process_especes_autres
+from src.n2000.especesInscrites import process_especes_inscrites
 from src.n2000.habitatsN2000 import process_habitats_n2000
-from src.utils.utilsN2000 import create_table_hab_n2000, create_table_especes_inscrites
+from src.utils.utilsN2000 import create_table_hab_n2000, create_table_especes_inscrites, create_table_especes_autres
 from src.utils.utils import extract_info, create_table
 
 
@@ -55,25 +57,42 @@ def process_n2000(ws, root, current_row):
             current_row,
         )
         
-        # Ajouter le troisième tableau pour les espèces
+        # Ajouter le troisième tableau pour les espèces inscrites
     if root.find(".//SPECIES_ROW") is not None:
         current_row = create_table_especes_inscrites(ws, current_row)
 
-        # # Parcourir les balises HABIT1_ROW pour récupérer les habitats
-        # for habit1_row in root.findall(".//HABIT1_ROW"):
-        #     current_row = process_habitats_n2000(habit1_row, ws, current_row)
-        # ws.append([])
-        # current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
+        # # Parcourir les balises SPECIES_ROW pour récupérer les espèces
+        for species_row in root.findall(".//SPECIES_ROW"):
+            current_row = process_especes_inscrites(species_row, ws, current_row)
+        ws.append([])
+        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
     else:
         current_row = create_table(
             ws,
-            "Types d’habitats inscrits à l’annexe I",
+            "Espèces inscrites à l’annexe II de la directive 92/43/CEE et évaluation",
             [
                 "Non renseigné",
             ],
             current_row,
         )
         
-    
+    # Ajouter le quatrième tableau pour les espèces autres
+    if root.find(".//SPECIES_OTHER_ROW") is not None:
+        current_row = create_table_especes_autres(ws, current_row)
+
+        # # Parcourir les balises SPECIES_OTHER_ROW pour récupérer les espèces autres
+        for species_other_row in root.findall(".//SPECIES_OTHER_ROW"):
+            current_row = process_especes_autres(species_other_row, ws, current_row)
+        ws.append([])
+        current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le quatrième tableau
+    else:
+        current_row = create_table(
+            ws,
+            "Autres espèces importantes de faune et de flore",
+            [
+                "Non renseigné",
+            ],
+            current_row,
+        )
     
     return current_row
