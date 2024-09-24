@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       # Install PyInstaller
       - name: Install PyInstaller
@@ -37,7 +37,7 @@ jobs:
       # Build the executable
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile --icon favicon.ico --name v-1-1-${{ github.run_number }}-bibliographie-zonage main.py
+          pyinstaller --onefile --icon favicon.ico --name v-1-2-${{ github.run_number }}-bibliographie-zonage main.py
       
       # Create GitHub Release
       - name: Create GitHub Release
@@ -47,7 +47,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "v-${{ github.sha }}"
-          release_name: "Release v-1-1-${{ github.run_number }}"
+          release_name: "Release v-1-2-${{ github.run_number }}"
           draft: false
           prerelease: false
 
@@ -58,6 +58,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/v-1-1-${{ github.run_number }}-bibliographie-zonage.exe
-          asset_name: v-1-1-${{ github.run_number }}-bibliographie-zonage.exe
+          asset_path: ./dist/v-1-2-${{ github.run_number }}-bibliographie-zonage.exe
+          asset_name: v-1-2-${{ github.run_number }}-bibliographie-zonage.exe
           asset_content_type: application/octet-stream
