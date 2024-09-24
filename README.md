@@ -1,8 +1,13 @@
 # Automatisation-biblio
 
-[![Build Status](https://github.com/Milou34/Automatisation-biblio/actions/workflows/build-executable-create-release.yml/badge.svg)](https://github.com/Milou34/Automatisation-biblio/actions/workflows/build-executable-create-release.yml)
-[![Code Quality](https://github.com/Milou34/Automatisation-biblio/actions/workflows/pylint.yml/badge.svg)](https://github.com/Milou34/Automatisation-biblio/actions/workflows/pylint.yml)
+<a href="https://github.com/Milou34/Automatisation-biblio/actions/workflows/build-executable-create-release.yml" target="_blank">![Build Status](https://github.com/Milou34/Automatisation-biblio/actions/workflows/build-executable-create-release.yml/badge.svg)</a>
+<a href="https://github.com/Milou34/Automatisation-biblio/actions/workflows/pylint.yml" target="_blank">![Code Quality](https://github.com/Milou34/Automatisation-biblio/actions/workflows/pylint.yml/badge.svg)</a>
+<a href="https://github.com/Milou34/Automatisation-biblio/blob/main/LICENSE.txt" target="_blank">![Licence](https://img.shields.io/badge/Licence-Apache_2.0.-blue.svg)</a>
 
+<a href="https://www.python.org/doc" target="_blank">![Python](https://img.shields.io/badge/Python-3.12-ffd343?logo=python)</a>
+<a href="https://pypi.org/project/openpyxl" target="_blank">![Openpyxl](https://img.shields.io/badge/Openpyxl-3.1.5-ffd343?logo=pypi)</a>
+<a href="https://pypi.org/project/requests" target="_blank">![Requests](https://img.shields.io/badge/Requests-2.32.3-ffd343?logo=pypi)</a>
+<a href="https://pypi.org/project/psutil" target="_blank">![Psutil](https://img.shields.io/badge/Psutil-6.0.0-ffd343?logo=pypi)</a>
 
 ## Bibliographie Automatisée pour les Études Environnementales
 
@@ -19,9 +24,9 @@ Ce projet Python a pour objectif d'automatiser les tâches courantes de gestion 
 
 Avant de commencer, assurez-vous de suivre les étapes suivantes :
 
-1. Télécharger [l'executable dans la release](https://github.com/Milou34/Automatisation-biblio/releases/latest)
+1. Télécharger <a href="https://github.com/Milou34/Automatisation-biblio/releases/latest" target="_blank">l'executable</a>
 2. Lancer l'executable sur votre PC
-3. Suiver les instructions qui s'affichent dans la console
+3. Suivre les instructions qui s'affichent dans la console
 
 ## Structure du Projet
 
@@ -39,8 +44,8 @@ Avant de commencer, assurez-vous de suivre les étapes suivantes :
 
 ## Authors
 
-- **[Marylou Bertin](https://www.linkedin.com/in/marylou-bertin/)** : Cheffe de Projet & Developpeuse
-- **[Valentin Guyon](https://www.linkedin.com/in/valentin-guyon/)** : Lead Developper
+- <a href="https://www.linkedin.com/in/marylou-bertin" target="_blank">**Marylou Bertin**</a> : Cheffe de Projet & Developpeuse
+- <a href="https://www.linkedin.com/in/valentin-guyon" target="_blank">**Valentin Guyon**</a> : Lead Developper & DevOps
 
 ## Licence
-Ce projet est sous licence Apache 2.0. Voir le fichier [LICENSE](./LICENSE.txt) pour plus de détails.
+Ce projet est sous licence Apache 2.0. Voir le fichier <a href="./LICENSE.txt" target="_blank">`LICENSE.txt`</a> pour plus de détails.
