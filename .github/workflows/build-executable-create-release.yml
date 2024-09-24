@@ -32,7 +32,7 @@ jobs:
       # Build the executable
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile --name bibliographie-zonage main.py
+          pyinstaller --onefile --name v-1-1-${{ github.run_number }}-bibliographie-zonage main.py
       
       # Create GitHub Release
       - name: Create GitHub Release
@@ -53,6 +53,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/bibliographie-zonage
-          asset_name: bibliographie-zonage.exe
+          asset_path: ./dist/v-1-1-${{ github.run_number }}-bibliographie-zonage
+          asset_name: v-1-1-${{ github.run_number }}-bibliographie-zonage.exe
           asset_content_type: application/octet-stream
