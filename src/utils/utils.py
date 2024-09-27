@@ -99,7 +99,7 @@ def merge_groups(ws, start_row, end_row, merge_column, check_column):
         cell.alignment = cell.alignment.copy(horizontal="center")
 
 
-def adjust_columns(wb):
+def adjust_columns(wb, non_formated_cells):
     """
     Ajuste la largeur de chaque colonne en fonction de la longueur du texte le plus long dans chaque colonne
     et active le retour à la ligne automatique dans toutes les cellules pour toutes les feuilles du classeur.
@@ -140,8 +140,9 @@ def adjust_columns(wb):
         for row in ws.iter_rows():
             for cell in row:
                 # Vérifier si la cellule n'est pas en gras
-                if not (cell.font.bold):
+                if not (cell.font.bold) and cell.coordinate not in non_formated_cells:
                     cell.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center')
+                
 
 
 def close_excel_if_open(file_path):

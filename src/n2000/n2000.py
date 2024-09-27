@@ -1,3 +1,4 @@
+from src.n2000.legendes import legende_especes_autres, legende_especes_inscrites, legende_habitats
 from src.n2000.especesAutres import process_especes_autres
 from src.n2000.especesInscrites import process_especes_inscrites
 from src.n2000.habitatsN2000 import process_habitats_n2000
@@ -5,7 +6,7 @@ from src.utils.utilsN2000 import create_table_hab_n2000, create_table_especes_in
 from src.utils.utils import extract_info, create_table
 
 
-def process_n2000(ws, root, current_row):
+def process_n2000(ws, root, current_row, non_formated_cells):
     # Ajouter le premier tableau pour les informations générales
     current_row = create_table(
         ws,
@@ -41,6 +42,7 @@ def process_n2000(ws, root, current_row):
         # Parcourir les balises HABIT1_ROW pour récupérer les habitats
         for habit1_row in root.findall(".//HABIT1_ROW"):
             current_row = process_habitats_n2000(habit1_row, ws, current_row)
+        current_row, non_formated_cells = legende_habitats(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
     else:
@@ -60,6 +62,7 @@ def process_n2000(ws, root, current_row):
         # # Parcourir les balises SPECIES_ROW pour récupérer les espèces
         for species_row in root.findall(".//SPECIES_ROW"):
             current_row = process_especes_inscrites(species_row, ws, current_row)
+        current_row, non_formated_cells = legende_especes_inscrites(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
     else:
@@ -79,6 +82,7 @@ def process_n2000(ws, root, current_row):
         # # Parcourir les balises SPECIES_OTHER_ROW pour récupérer les espèces autres
         for species_other_row in root.findall(".//SPECIES_OTHER_ROW"):
             current_row = process_especes_autres(species_other_row, ws, current_row)
+        current_row, non_formated_cells = legende_especes_autres(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le quatrième tableau
     else:
@@ -91,4 +95,4 @@ def process_n2000(ws, root, current_row):
             current_row,
         )
     
-    return current_row
+    return current_row, non_formated_cells

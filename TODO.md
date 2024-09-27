@@ -38,3 +38,5 @@ Sourece : <AUTEUR>
 Code habitat CORINE biotopes : LB_CODE
 Nom habitat : LB_HAB
 Référenciel habitat (CORINE, EUNIS): LB_TYPO
+
+Ajouter les distances à la ZIP

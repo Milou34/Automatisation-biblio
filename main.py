@@ -8,6 +8,7 @@ from src.znieff.znieff import process_znieff
 
 
 def main(folder_source):
+    non_formated_cells = []
     output_file = os.path.join(folder_source, "Récap.xlsx")
 
     # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
@@ -56,7 +57,7 @@ def main(folder_source):
                         current_row = process_znieff(ws, root, current_row_znieff2)
                 else:
                     ws = ws_n2000
-                    current_row = process_n2000(ws, root, current_row_n2000)
+                    current_row, non_formated_cells = process_n2000(ws, root, current_row_n2000, non_formated_cells)
 
                 # Ajoute 2 lignes vides entre chaque fichier XML
                 ws.append([])
@@ -78,7 +79,7 @@ def main(folder_source):
                     current_row_n2000 = current_row
 
     # Sauvegarder le fichier Excel
-    adjust_columns(wb)
+    adjust_columns(wb, non_formated_cells)
     apply_borders(wb)
     wb.save(os.path.join(folder_source, "Récap.xlsx"))
 
