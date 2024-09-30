@@ -144,4 +144,7 @@ def process_znieff(ws, root, current_row):
         ws.append([])
         current_row += 1
 
+    ws.append([])
+    current_row += 1
+    
     return current_row
