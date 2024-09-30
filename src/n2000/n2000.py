@@ -42,6 +42,8 @@ def process_n2000(ws, root, current_row, non_formated_cells):
         # Parcourir les balises HABIT1_ROW pour récupérer les habitats
         for habit1_row in root.findall(".//HABIT1_ROW"):
             current_row = process_habitats_n2000(habit1_row, ws, current_row)
+        ws.append([])
+        current_row += 1
         current_row, non_formated_cells = legende_habitats(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le deuxième tableau
@@ -62,6 +64,8 @@ def process_n2000(ws, root, current_row, non_formated_cells):
         # # Parcourir les balises SPECIES_ROW pour récupérer les espèces
         for species_row in root.findall(".//SPECIES_ROW"):
             current_row = process_especes_inscrites(species_row, ws, current_row)
+        ws.append([])
+        current_row += 1
         current_row, non_formated_cells = legende_especes_inscrites(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le troisième tableau
@@ -82,6 +86,8 @@ def process_n2000(ws, root, current_row, non_formated_cells):
         # # Parcourir les balises SPECIES_OTHER_ROW pour récupérer les espèces autres
         for species_other_row in root.findall(".//SPECIES_OTHER_ROW"):
             current_row = process_especes_autres(species_other_row, ws, current_row)
+        ws.append([])
+        current_row += 1
         current_row, non_formated_cells = legende_especes_autres(ws, current_row, non_formated_cells)
         ws.append([])
         current_row += 1  # Saute une ligne et met à jour la ligne après avoir ajouté le quatrième tableau

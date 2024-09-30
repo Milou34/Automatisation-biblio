@@ -226,6 +226,11 @@ def apply_borders_range(ws, start_row, end_row):
             if ws.cell(row=row, column=col).value is not None:
                 max_col = max(max_col, col)  # Mettre à jour max_col si on trouve une valeur
 
+    # Vérifier que le tableau a plus de deux colonnes avec des valeurs
+    if max_col - min_col + 1 <= 2:
+        # Si le tableau a deux colonnes ou moins, ne pas appliquer de bordures
+        return
+
     # Appliquer des bordures intérieures
     for row in range(start_row, end_row + 1):
         for col in range(min_col, max_col + 1):
