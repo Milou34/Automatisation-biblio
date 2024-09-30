@@ -5,10 +5,13 @@ import os
 from src.n2000.n2000 import process_n2000
 from src.utils.utils import adjust_columns, apply_borders, close_excel_if_open
 from src.znieff.znieff import process_znieff
+from src.telechargement.telechargementXML import input_telechargement_xml
 
 
-def main(folder_source):
+def main():
+    folder_source = input_telechargement_xml()
     non_formated_cells = []
+    print(f'{folder_source}')
     output_file = os.path.join(folder_source, "Récap.xlsx")
 
     # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
@@ -48,7 +51,7 @@ def main(folder_source):
                     new_file_name = f"znieff{type_znieff}_{code_zone}.xml"
                     new_file_path = os.path.join(chemin, new_file_name)
                     # Renommer le fichier
-                    os.rename(file_path, new_file_path)
+                    os.replace(file_path, new_file_path)
                     if type_znieff == 1:
                         ws = ws_znieff1
                         current_row = process_znieff(ws, root, current_row_znieff1)
@@ -88,11 +91,5 @@ def main(folder_source):
     os.startfile(output_file)
 
 
-# Demander les chemins des fichiers à l'utilisateur
-# folder_source = input("Entrez le chemin du dossier des XML sources, le Excel sera créé dans ce dossier : ")
-# TODO : rajouter demande du nom de l'Excel
-# Créer le dossier de destination s'il n'existe pas
-# os.makedirs(folder_source, exist_ok=True)
-
-# Lancer la conversion XML vers Excel
-main("C:\\Users\\MarylouBERTIN\\Documents\\Test")
+# Lancer le script
+main()
