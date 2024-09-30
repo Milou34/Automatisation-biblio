@@ -144,7 +144,6 @@ def adjust_columns(wb, non_formated_cells):
                     cell.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center')
                 
 
-
 def close_excel_if_open(file_path):
     """
     Vérifie si un fichier Excel est ouvert en recherchant les processus liés à Excel.

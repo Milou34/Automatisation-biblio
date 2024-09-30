@@ -58,6 +58,8 @@ def process_znieff(ws, root, current_row):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
 
     # Ajoute le 3ème tableau
     if root.find(".//ESPECE_ROW") is not None:
@@ -101,6 +103,8 @@ def process_znieff(ws, root, current_row):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
 
     # Ajoute le 4ème tableau
     if root.find(".//ESPECE_PROT_ROW") is not None:
@@ -137,5 +141,7 @@ def process_znieff(ws, root, current_row):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
 
     return current_row

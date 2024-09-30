@@ -50,7 +50,7 @@ Puis appuyer sur `Entrer`.
     S'il y a une erreur sur l'un des codes (s'ils n'ont pas exactement 9 chiffres), les codes sont redemandés.\
     **Attention à bien renseigner uniquement des codes ZNIEFF.**
 
-7. Entrer les codes des zones Natura 2000 présentes dans l'AEE, qui sont notés dans la colonne `SITE_CODE` de la couche `zonages_aires_detude` dans QGIS, en les séparant par une virgule.\
+7. Entrer les codes des zones Natura 2000 (les SIC et ZPS) présentes dans l'AEE, qui sont notés dans la colonne `SITE_CODE` de la couche `zonages_aires_detude` dans QGIS, en les séparant par une virgule.\
 Puis appuyer sur `Entrer`.
 
     S'il n'y a pas de code Natura 2000 à renseigner, appuyer seulement sur `Entrer` et poursuivez le programme.

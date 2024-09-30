@@ -24,11 +24,9 @@ def process_n2000(ws, root, current_row, non_formated_cells):
 
     type_zone = extracted_value[0]
     if type_zone == 'A':
-        extracted_value[0] = "p-SIC"
-    elif type_zone == 'B':
-        extracted_value[0] = "SIC"
-    else:
         extracted_value[0] = "ZPS"
+    else:
+        extracted_value[0] = "SIC"
          
     ws.append(extracted_value)
     ws.append([])
@@ -56,6 +54,8 @@ def process_n2000(ws, root, current_row, non_formated_cells):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
         
         # Ajouter le troisième tableau pour les espèces inscrites
     if root.find(".//SPECIES_ROW") is not None:
@@ -78,6 +78,8 @@ def process_n2000(ws, root, current_row, non_formated_cells):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
         
     # Ajouter le quatrième tableau pour les espèces autres
     if root.find(".//SPECIES_OTHER_ROW") is not None:
@@ -100,5 +102,7 @@ def process_n2000(ws, root, current_row, non_formated_cells):
             ],
             current_row,
         )
+        ws.append([])
+        current_row += 1
     
     return current_row, non_formated_cells
