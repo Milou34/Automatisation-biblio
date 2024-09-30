@@ -15,18 +15,52 @@ Ce projet Python a pour objectif d'automatiser les tâches courantes de gestion 
 
 ## Fonctionnalités
 
-- **Téléchargment automatisée** : Recherche et téléchargement des données au format XML depuis le site de l'INPN
+- **Téléchargment automatisée** : Recherche et téléchargement des données ZNIEFF et N2000 au format XML depuis le site de l'INPN
 - **Formatage des données** : Pipeline de récupération, préparation et formatage des données.
-- **Création d'une feuille de calcul** : Création et insertion des données formatées dans un excel lisible.
+- **Création de plusieurs feuilles de calcul et intégration des données** : Création et insertion des données formatées dans un excel lisible et renommé.
 - **Mise en forme du excel** : Formatage du style des cellules et des tableau.
 
 ## Utilisation
 
 Avant de commencer, assurez-vous de suivre les étapes suivantes :
 
-1. Télécharger <a href="https://github.com/Milou34/Automatisation-biblio/releases/latest" target="_blank">l'executable</a>
-2. Lancer l'executable sur votre PC
-3. Suivre les instructions qui s'affichent dans la console
+
+1. Télécharger <a href="https://github.com/Milou34/Automatisation-biblio/releases/latest" target="_blank">l'executable</a> (cliquer sur le .exe)
+2. Préalablement au lancement du programme, pour le ou les projets dont vous souhaitez créer la bibliographie, assurez vous d'avoir bien créé la couche `zonages_aires_detude` à l'aide du modèle Zonages sur QGIS. Dans la table attributaire de cette couche, vous pourrez retrouver les `codes ZNIEFF et Natura 2000` demandés par le programme.
+3. Lancez l'exécutable `v...-bibliographie-zonage` depuis votre dossier téléchargements.
+4. A la première exécution du programme, cliquez sur `Informations complémentaires`, puis sur `Exécuter quand même`. 
+5. Suivre les instructions qui s'affichent dans la console : 
+
+    5.1. Renseigner le chemin du dossier de destination, où seront téléchargés les fichiers XML et où sera créé le Excel final.
+
+    **ATTENTION! Ce dossier ne doit pas se trouver sur le OneDrive** (Sinon vous aurez une erreur).\
+    **Tips** : Ouvrez l'explorateur de fichiers puis allez dans :
+    Ce PC > Windows (C:) > Utilisateurs > PrénomNOM > 
+    Puis créez un dossier `Documents` à cet endroit (en local). Vous travaillerez TOUJOURS depuis ce dossier pour créer vos Excels de bibliographie.
+
+    A cette étape, vous pouvez donc copier/coller le chemin du dossier dans la console (clic droit sur le chemin en haut de la fenêtre, `copier l'adresse`) et écrire à la suite le nom du dossier à créer. Exemple : `C:\Users\PrénomNOM\Documents\106-Féricy-Bibliographie`
+
+    5.2. Entrer les codes des ZNIEFFs de types 1 et 2 présentes dans l'AER, qui sont notés dans la colonne `ID_MNHN` de la couche `zonages_aires_detude` dans QGIS, en les séparant par une virgule.
+
+    S'il n'y a pas de code ZNIEFF à renseigner, appuyer seulement sur `Entrer` et poursuivez le programme.
+
+    S'il y a une erreur sur l'un des codes (s'ils n'ont pas exactement 9 chiffres), les codes sont redemandés.\
+    **Attention à bien renseigner uniquement des codes ZNIEFF.**
+
+    5.3. Entrer les codes des Natura 2000 présentes dans l'AEE, qui sont notés dans la colonne `SITE_CODE` de la couche `zonages_aires_detude` dans QGIS, en les séparant par une virgule.
+
+    S'il n'y a pas de code Natura 2000 à renseigner, appuyer seulement sur `Entrer` et poursuivez le programme.
+
+    S'il y a une erreur sur l'un des codes (s'ils ne commencent pas par FR suivi de 7 chiffres exactement), les codes sont redemandés.\
+    **Attention à bien renseigner uniquement des codes Natura 2000.**
+
+    5.4. Entrer le numéro du projet, cela permettra de renommer automatiquement l'excel final en : `Bibliographie - n° projet`.
+
+    5.5. Le programme génère et ouvre l'excel final.
+
+    5.6. Si vous souhaitez poursuivre avec la bibliographie d'un autre projet, appuyez sur `Entrer`. Sinon, appuyez sur n'importe quelle autre touche pour quitter le programme.
+
+
 
 ## Structure du Projet
 

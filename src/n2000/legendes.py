@@ -1,4 +1,4 @@
-from openpyxl.styles import Alignment
+from openpyxl.styles import Alignment, Font
 
 def legende_habitats(ws, current_row, non_formated_cells):
     # Définition des lignes de texte
@@ -16,6 +16,7 @@ def legende_habitats(ws, current_row, non_formated_cells):
         cell = ws.cell(row=current_row, column=1)
         cell.value = ligne
         cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=False)
+        cell.font = Font(size=9)
         
         # Ajouter la coordonnée de la cellule à la liste
         non_formated_cells.append(cell.coordinate)
@@ -44,6 +45,7 @@ def legende_especes_inscrites(ws, current_row, non_formated_cells):
         cell = ws.cell(row=current_row, column=1)
         cell.value = ligne
         cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=False)
+        cell.font = Font(size=9)
         
         # Ajouter la coordonnée de la cellule à la liste
         non_formated_cells.append(cell.coordinate)
@@ -68,6 +70,7 @@ def legende_especes_autres(ws, current_row, non_formated_cells):
         cell = ws.cell(row=current_row, column=1)
         cell.value = ligne
         cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=False)
+        cell.font = Font(size=9)
         
         # Ajouter la coordonnée de la cellule à la liste
         non_formated_cells.append(cell.coordinate)

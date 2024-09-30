@@ -1,3 +1,4 @@
+import msvcrt
 import xml.etree.ElementTree as ET
 from openpyxl import Workbook
 import fnmatch
@@ -12,7 +13,9 @@ def main():
     folder_source = input_telechargement_xml()
     non_formated_cells = []
     print(f'{folder_source}')
-    output_file = os.path.join(folder_source, "Récap.xlsx")
+    nom_excel = input("Entrer le numéro du projet : ")
+    nom_excel = "Bibliographie-" + nom_excel + ".xlsx"
+    output_file = os.path.join(folder_source, nom_excel)
 
     # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
     close_excel_if_open(output_file)
@@ -84,12 +87,28 @@ def main():
     # Sauvegarder le fichier Excel
     adjust_columns(wb, non_formated_cells)
     apply_borders(wb)
-    wb.save(os.path.join(folder_source, "Récap.xlsx"))
+    wb.save(os.path.join(folder_source, nom_excel))
 
     # Ouvrir le fichier Excel généré
     print(f"Ouverture de {output_file} généré avec succès !")
     os.startfile(output_file)
 
-
-# Lancer le script
-main()
+# Lancer le script avec gestion d'erreur
+while True:
+    try:
+        main()
+    except Exception as e:
+        print(f'Une erreur est arrivée : {e}')
+    
+    # Attendre une touche de l'utilisateur
+    print("\nAppuyez sur 'Entrée' pour relancer le programme, ou une autre touche pour quitter.")
+    
+    # Lire un caractère sans attendre la touche "Entrée"
+    key = msvcrt.getch()
+    
+    # Si la touche est "Entrée" (caractère 13), relancer la boucle
+    if key == b'\r':  # '\r' est le code pour la touche "Entrée" sous Windows
+        continue
+    else:
+        print("Fermeture du programme.")
+        break
