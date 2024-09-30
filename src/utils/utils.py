@@ -96,7 +96,7 @@ def merge_groups(ws, start_row, end_row, merge_column, check_column):
     # Optionnel: Ajuster les alignements des cellules fusionnées
     for row in range(start_row, end_row + 1):
         cell = ws[f"{merge_column}{row}"]
-        cell.alignment = cell.alignment.copy(horizontal="center")
+        cell.alignment = cell.alignment.copy(horizontal="center", vertical='center')
 
 
 def adjust_columns(wb, non_formated_cells):
