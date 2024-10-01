@@ -34,7 +34,7 @@ def process_znieff(ws, root, current_row):
                 "CORINE biotopes",
                 "Habitats d’intérêt communautaire",
                 "Source",
-                "Surface en Ha",
+                "Surface en %",
                 "Observation",
             ],
             current_row,
