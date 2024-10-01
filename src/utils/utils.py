@@ -73,7 +73,6 @@ def create_table_autres_zones(ws):
         cell.alignment = Alignment(horizontal="center", vertical='center')  # Centrer horizontalement
     
 
-
 def merge_groups(ws, start_row, end_row, merge_column, check_column):
     """
     Fusionne les cellules d'une colonne spécifiée si elles contiennent des valeurs identiques
@@ -152,8 +151,8 @@ def adjust_columns(wb, non_formated_cells):
         # Activer le retour à la ligne automatique et centrer horizontalement dans toutes les cellules
         for row in ws.iter_rows():
             for cell in row:
-                # Vérifier si la cellule n'est pas en gras
-                if not (cell.font.bold) and cell.coordinate not in non_formated_cells:
+                # Vérifier si la cellule n'est pas en gras ou si elle ne fait pas parti des cellules à ne pas formater de la feuille N2000 (légendes)
+                if not cell.font.bold and (ws.title != "N2000" or cell.coordinate not in non_formated_cells):
                     cell.alignment = Alignment(wrap_text=True, vertical='center', horizontal='center')
                 
 
