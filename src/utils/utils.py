@@ -62,7 +62,7 @@ def create_table(ws, title, headers, start_row):
 
 
 def create_table_autres_zones(ws):
-    headers = ["Code national", "Nom du site", "Date de création", "Gestionnaire", "Opérateur", "Surface totale", "Surface zone", "Distance zone - ZIP", "Pourcentage surface zone"
+    headers = ["Code national", "Nom du site", "Date de création", "Fiche URL", "Gestionnaire", "Opérateur", "Surface totale", "Surface zone", "Distance zone - ZIP", "Pourcentage surface zone"
     ]
     # Ajouter les en-têtes et les mettre en gras et centrés
     ws.append(headers)
