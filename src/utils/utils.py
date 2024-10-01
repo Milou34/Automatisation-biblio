@@ -61,6 +61,19 @@ def create_table(ws, title, headers, start_row):
     return start_row + 2
 
 
+def create_table_autres_zones(ws):
+    headers = ["Code national", "Nom du site", "Date de création", "Gestionnaire", "Opérateur", "Surface totale", "Surface zone", "Distance zone - ZIP", "Pourcentage surface zone"
+    ]
+    # Ajouter les en-têtes et les mettre en gras et centrés
+    ws.append(headers)
+
+    for col_num, header in enumerate(headers, start=1):
+        cell = ws.cell(row=1, column=col_num)
+        cell.font = Font(bold=True)  # Mettre en gras
+        cell.alignment = Alignment(horizontal="center", vertical='center')  # Centrer horizontalement
+    
+
+
 def merge_groups(ws, start_row, end_row, merge_column, check_column):
     """
     Fusionne les cellules d'une colonne spécifiée si elles contiennent des valeurs identiques

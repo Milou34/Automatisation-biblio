@@ -1,10 +1,11 @@
 import msvcrt
 import xml.etree.ElementTree as ET
 from openpyxl import Workbook
+from openpyxl.styles import Font
 import fnmatch
 import os
 from src.n2000.n2000 import process_n2000
-from src.utils.utils import adjust_columns, apply_borders, close_excel_if_open
+from src.utils.utils import adjust_columns, apply_borders, close_excel_if_open, create_table_autres_zones
 from src.znieff.znieff import process_znieff
 from src.telechargement.telechargementXML import input_telechargement_xml
 
@@ -23,16 +24,35 @@ def main():
     # Créer un nouveau fichier Excel
     wb = Workbook()
 
-    # Créer des feuilles distinctes pour ZNIEFF 1, ZNIEFF 2 et N2000
-    ws_znieff1 = wb.active
-    ws_znieff1.title = "ZNIEFF 1"
+    # Créer des feuilles distinctes pour toutes les zones
+    ws_donnees_publiques = wb.active
+    ws_donnees_publiques.title = "Données publiques"
+    ws_znieff1 = wb.create_sheet(title="ZNIEFF 1")
     ws_znieff2 = wb.create_sheet(title="ZNIEFF 2")
     ws_n2000 = wb.create_sheet(title="N2000")
+    ws_rnr = wb.create_sheet(title="RNR")
+    ws_rnn = wb.create_sheet(title="RNN")
+    ws_pnr = wb.create_sheet(title="PNR")
+    ws_pnn = wb.create_sheet(title="PNN")
+    ws_apb = wb.create_sheet(title="APB")
+    ws_rb = wb.create_sheet(title="Réserve biologique")
+    ws_mnb = wb.create_sheet(title="Man and Biosphère")
+    ws_cen = wb.create_sheet(title="CEN")
+    ws_mc = wb.create_sheet(title="Mesures compensatoires")
+    
+    autres_zones = [ws_rnr, ws_rnn, ws_pnr, ws_pnn, ws_apb, ws_rb, ws_mnb, ws_cen, ws_mc]
 
-    # Initialiser la ligne actuelle pour chaque type de zone
+    # Initialiser la ligne actuelle pour les ZNIEFF et N2000
     current_row_znieff1 = 1
     current_row_znieff2 = 1
     current_row_n2000 = 1
+
+    # Ajoute les tableaux types pour les autres zones
+    ws_donnees_publiques['A1'] = "l’INPN, le MNHN, la DREAL, Tela-botanica, Faune France ainsi que les bases de données naturalistes des associations de la région"
+    ws_donnees_publiques['A1'].font = Font(size=16)
+    ws_donnees_publiques.merge_cells('A1:N1')
+    for ws in autres_zones:
+        create_table_autres_zones(ws)
 
     # Parcours des fichiers dans le dossier
     for chemin, sous_dossiers, fichiers in os.walk(folder_source):
