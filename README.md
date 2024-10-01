@@ -27,7 +27,7 @@ Avant de commencer, assurez-vous de suivre les étapes suivantes :
 
 1. Télécharger <a href="https://github.com/Milou34/Automatisation-biblio/releases/latest" target="_blank">l'executable</a> (cliquer sur le .exe)
 2. Préalablement au lancement du programme, pour le ou les projets dont vous souhaitez créer la bibliographie, assurez vous d'avoir bien créé la couche `zonages_aires_detude` à l'aide du modèle Zonages sur QGIS. Dans la table attributaire de cette couche, vous pourrez retrouver les `codes ZNIEFF et Natura 2000` demandés par le programme.
-3. Lancez l'exécutable `v...-bibliographie-zonage` depuis votre dossier téléchargements.
+3. Lancez l'exécutable `v...-bibliographie-zonage`.
 4. A la première exécution du programme, cliquez sur `Informations complémentaires`, puis sur `Exécuter quand même`. 
 5. Suivez les instructions qui s'affichent dans la console : 
 
