@@ -13,7 +13,6 @@ from src.telechargement.telechargementXML import input_telechargement_xml
 def main():
     folder_source = input_telechargement_xml()
     non_formated_cells = []
-    print(f'{folder_source}')
     nom_excel = input("Entrer le numéro du projet : ")
     nom_excel = "Bibliographie-" + nom_excel + ".xlsx"
     output_file = os.path.join(folder_source, nom_excel)
@@ -67,14 +66,7 @@ def main():
                 # Sélectionner la feuille et la ligne en fonction du type de ZNIEFF
                 if root.tag == "ZNIEFF":
                     # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE
-                    type_znieff = int(
-                        root.find("TY_ZONE").text
-                    )  # On suppose que TY_ZONE existe et est valide
-                    code_zone = int(root.find("NM_SFFZN").text)
-                    new_file_name = f"znieff{type_znieff}_{code_zone}.xml"
-                    new_file_path = os.path.join(chemin, new_file_name)
-                    # Renommer le fichier
-                    os.replace(file_path, new_file_path)
+                    type_znieff = int(root.find("TY_ZONE").text)  # On suppose que TY_ZONE existe et est valide
                     if type_znieff == 1:
                         ws = ws_znieff1
                         current_row = process_znieff(ws, root, current_row_znieff1)
@@ -93,16 +85,17 @@ def main():
 
                 # Mettre à jour la ligne courante pour le type de ZNIEFF
                 if root.tag == "ZNIEFF":
-                    # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE
-                    type_znieff = int(
-                        root.find("TY_ZONE").text
-                    )  # On suppose que TY_ZONE existe et est valide
+                    type_znieff = int(root.find("TY_ZONE").text)
                     if type_znieff == 1:
                         current_row_znieff1 = current_row
                     else:
                         current_row_znieff2 = current_row
                 else:
                     current_row_n2000 = current_row
+
+                # Supprimer le fichier XML après son traitement
+                os.remove(file_path)
+                print(f"Le fichier {fichier} a été traité puis supprimé.")
 
     # Sauvegarder le fichier Excel
     adjust_columns(wb, non_formated_cells)
