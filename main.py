@@ -14,7 +14,7 @@ def main():
     folder_source = input_telechargement_xml()
     non_formated_cells = []
     nom_excel = input("Entrer le numéro du projet : ")
-    nom_excel = "Bibliographie-" + nom_excel + ".xlsx"
+    nom_excel = "Bibliographie-" + str(nom_excel) + ".xlsx"
     output_file = os.path.join(folder_source, nom_excel)
 
     # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
