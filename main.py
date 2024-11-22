@@ -11,14 +11,28 @@ from src.telechargement.telechargementXML import input_telechargement_xml
 
 
 def main():
-    folder_source = input_telechargement_xml()
+        # Validation de l'entrée utilisateur pour le chemin du dossier
+    while True:
+        folder_source = input_telechargement_xml()
+        if folder_source:  # Vérifie que l'entrée n'est pas vide
+            break
+        print("Erreur : Le dossier source ne peut pas être vide. Veuillez réessayer.")
+
     non_formated_cells = []
-    nom_excel = input("Entrer le numéro du projet : ")
+    
+        # Validation de l'entrée utilisateur pour le numéro du projet
+    while True:
+        nom_excel = input("Entrer le numéro du projet : ").strip()  # Assainir l'entrée
+        if nom_excel:  # Vérifie que l'entrée n'est pas vide
+            break
+        print("Erreur : Le numéro du projet ne peut pas être vide. Veuillez réessayer.")
+
     nom_excel = "Bibliographie-" + str(nom_excel) + ".xlsx"
     output_file = os.path.join(folder_source, nom_excel)
 
     # Vérifier si le fichier Excel est ouvert et le fermer si c'est le cas
-    close_excel_if_open(output_file)
+    if close_excel_if_open(output_file):
+        print(f"Fermeture du fichier {output_file} réussie.")
 
     # Créer un nouveau fichier Excel
     wb = Workbook()
@@ -62,7 +76,6 @@ def main():
                 tree = ET.parse(os.path.join(chemin, fichier))
                 root = tree.getroot()
                 file_path = os.path.join(chemin, fichier)
-
                 # Sélectionner la feuille et la ligne en fonction du type de ZNIEFF
                 if root.tag == "ZNIEFF":
                     # Déterminer le type de ZNIEFF à partir de la balise TY_ZONE

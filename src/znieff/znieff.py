@@ -43,7 +43,6 @@ def process_znieff(ws, root, current_row):
         # Parcourir les balises TYPO_INFO_ROW pour récupérer les habitats
         for typo_info_row in root.findall(".//TYPO_INFO_ROW"):
             fg_typo = typo_info_row.find("FG_TYPO").text
-
             # On ne garde que les habitats avec FG_TYPO = "D"
             if fg_typo == "D":
                 current_row = process_habitats(typo_info_row, ws, current_row)
@@ -60,6 +59,7 @@ def process_znieff(ws, root, current_row):
         )
         ws.append([])
         current_row += 1
+
 
     # Ajoute le 3ème tableau
     if root.find(".//ESPECE_ROW") is not None:

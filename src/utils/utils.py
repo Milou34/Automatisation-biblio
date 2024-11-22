@@ -170,6 +170,7 @@ def close_excel_if_open(file_path):
 
     for proc in psutil.process_iter(["pid", "name"]):
         try:
+            # Vérifie si le processus est un processus Excel
             if (
                 proc.info["name"].lower() in ["excel.exe", "excel"]
                 or "EXCEL" in proc.info["name"].upper()
@@ -181,12 +182,12 @@ def close_excel_if_open(file_path):
                         )
                         proc.terminate()
                         proc.wait()  # Assure que le processus est bien terminé
-                        print(f"Fermeture du fichier {file_name} réussie.")
-                        return
-
+                        return True  # Indique que le fichier a été fermé
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             continue
 
+    # Si aucune correspondance n'est trouvée, retourne False
+    return False
 
 def apply_borders(wb):
     """

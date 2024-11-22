@@ -39,6 +39,7 @@ def process_habitats(typo_info_row, ws, current_row):
     elif observation_S_text == "-":
         observation_S_text = ""
     observation = (observation_I_text + "-" + observation_S_text)
+    
     if observation == "--":
         observation = "-"
     elif len(observation)<6:
@@ -48,24 +49,19 @@ def process_habitats(typo_info_row, ws, current_row):
         
     # Initialiser la liste des valeurs d'habitats
     habitats_values = ["", "", "", source_text, surface, observation]
-
     # Parcourir les balises TYPO_ROW pour extraire les informations supplémentaires
     for typo_row in typo_info_row.findall(".//TYPO_ROW"):
         lb_typo_element = typo_row.find("LB_TYPO")
         lb_typo = lb_typo_element.text if lb_typo_element is not None else ""
         # Récupérer tout le texte de la balise LB_HAB sans les balises de mise en forme comme <em>
-        lb_hab_element = typo_row.find(".//LB_HAB")
+        lb_hab_element = typo_row.find(".//LB_HAB")        
         lb_hab = (
             "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
         )
-
         # Extraire LB_CODE et combiner avec LB_HAB
-        lb_code = (
-            typo_row.find(".//LB_CODE").text
-            if typo_row.find(".//LB_CODE") is not None
-            else ""
-        )
-        lb_hab = lb_code + " " + lb_hab
+        lb_code = typo_row.find(".//LB_CODE").text
+        lb_code = lb_code if lb_code is not None else ""
+        lb_hab = str(lb_code) + " " + lb_hab
 
         # Déterminer la colonne selon la valeur de LB_TYPO
         if lb_typo == "EUNIS 2012":
