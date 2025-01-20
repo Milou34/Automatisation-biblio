@@ -1,6 +1,5 @@
 from src.utils.utils import extract_info
 
-
 def process_habitats_n2000(habit1_row, ws, current_row):
     """
     Traite les habitats à partir des balises HABIT1_ROW et renvoie les valeurs des colonnes.
@@ -32,32 +31,22 @@ def process_habitats_n2000(habit1_row, ws, current_row):
     # Utiliser extract_info pour extraire les données
     extracted_values = extract_info(habit1_row, tag_paths)
     
-    # Concatène le code habitat et le nom de l'habitat
+    # Extraire le code habitat et le nom de l'habitat
     cd_hab = str(extracted_values[0])
     nom_hab = extracted_values[1]
-    habitat = cd_hab + " " + nom_hab
-    extracted_values[1] = habitat
-    
+
     # Traite pour PF
     if extracted_values[2] == 'true':
         extracted_values[2] = "X"
     else:
         extracted_values[2] = "-"
 
-    extracted_values.pop(0)
+    # Préparer les données avec le code et le nom dans des cellules séparées
+    extracted_values[0] = cd_hab
+    extracted_values[1] = nom_hab
 
+    # Ajouter les données à la feuille Excel
     ws.append(extracted_values)
     current_row += 1
     
     return current_row
-
-    
-
-
-    
-    
-    
-    
-
-    
-

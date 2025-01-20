@@ -7,14 +7,10 @@ def create_table_hab_n2000(ws, current_row):
     
     :param ws: La feuille de calcul (Worksheet)
     :param current_row: La ligne actuelle où l'en-tête doit être inséré
-    :param main_title: Le titre principal du tableau
-    :param column_names_A_F: Une liste de noms pour les colonnes A à F
-    :param title_G_J: Le titre pour les colonnes G à J (fusion horizontale)
-    :param sub_titles_H_J: Une liste de sous-titres pour les colonnes H à J
     """
     
-    # Ajouter le titre principal et le fusionner de A à J (colonnes 1 à 10)
-    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=10)
+    # Ajouter le titre principal et le fusionner de A à K (colonnes 1 à 11)
+    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=11)
     title_cell = ws.cell(row=current_row, column=1)
     title_cell.value = "Types d’habitats présents sur le site et évaluations"
     title_cell.font = Font(bold=True, size=16)
@@ -23,53 +19,54 @@ def create_table_hab_n2000(ws, current_row):
     # Passer à la ligne suivante pour l'en-tête des colonnes
     current_row += 1
     
-    # Fusionner les cellules de A à F sur la première ligne (fusion horizontale)
-    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=6)
+    # Fusionner les cellules de A à G sur la première ligne (fusion horizontale)
+    ws.merge_cells(start_row=current_row, start_column=1, end_row=current_row, end_column=7)
     title_cell = ws.cell(row=current_row, column=1)
     title_cell.value = "Types d’habitats inscrits à l’annexe I"
     title_cell.font = Font(bold=True)
     title_cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Définir les titres pour chaque colonne de B à E
-    titles = ["Habitat", "PF", "Superficie (Ha)", "Superficie (% de couverture)", "Grottes (nombre)", "Qualité des données"]
+    # Définir les titres pour chaque colonne de A à G
+    titles = ["Code", "Habitat", "PF", "Superficie (Ha)", "Superficie (% de couverture)", "Grottes (nombre)", "Qualité des données"]
 
-    # Fusionner les cellules de A à F sur les deux lignes suivantes (fusion verticale) et utiliser les noms fournis
-    for col in range(1, 7):  # Colonnes de A (1) à F (6)
+    # Fusionner les cellules de A à G sur les deux lignes suivantes (fusion verticale) et utiliser les noms fournis
+    for col in range(1, 8):  # Colonnes de A (1) à G (7)
         ws.merge_cells(start_row=current_row + 1, start_column=col, end_row=current_row + 2, end_column=col)
         cell = ws.cell(row=current_row + 1, column=col)
         cell.value = titles[col - 1]  # Utiliser les noms de la liste
         cell.font = Font(bold=True)
         cell.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Fusionner les cellules de G à J sur la première ligne (fusion horizontale)
-    ws.merge_cells(start_row=current_row, start_column=7, end_row=current_row, end_column=10)
-    title_cell_G_J = ws.cell(row=current_row, column=7)
+    # Fusionner les cellules de H à K sur la première ligne (fusion horizontale)
+    ws.merge_cells(start_row=current_row, start_column=8, end_row=current_row, end_column=11)
+    title_cell_G_J = ws.cell(row=current_row, column=8)
     title_cell_G_J.value = "Évaluation du site"
     title_cell_G_J.font = Font(bold=True)
     title_cell_G_J.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Fusionner les cellules de la colonne G sur les deux lignes suivantes (fusion verticale)
-    ws.merge_cells(start_row=current_row + 1, start_column=7, end_row=current_row + 2, end_column=7)
-    cell_G = ws.cell(row=current_row + 1, column=7)
+    # Fusionner les cellules de la colonne H sur les deux lignes suivantes (fusion verticale)
+    ws.merge_cells(start_row=current_row + 1, start_column=8, end_row=current_row + 2, end_column=8)
+    cell_G = ws.cell(row=current_row + 1, column=8)
     cell_G.value = "Représentativité (A|B|C|D)"
     cell_G.font = Font(bold=True)
     cell_G.alignment = Alignment(horizontal="center", vertical="center")
 
-    # Fusionner les cellules des colonnes H à J sur la deuxième ligne (fusion horizontale)
-    ws.merge_cells(start_row=current_row + 1, start_column=8, end_row=current_row + 1, end_column=10)
-    title_H_J = ws.cell(row=current_row + 1, column=8)
+    # Fusionner les cellules des colonnes I à K sur la deuxième ligne (fusion horizontale)
+    ws.merge_cells(start_row=current_row + 1, start_column=9, end_row=current_row + 1, end_column=11)
+    title_H_J = ws.cell(row=current_row + 1, column=9)
     title_H_J.value = "A|B|C"
     title_H_J.font = Font(bold=True)
     title_H_J.alignment = Alignment(horizontal="center", vertical="center")
 
     titles = ["Superficie relative", "Conservation", "Évaluation globale"]
-    # Ajouter des titres dans les cellules H2 à J2 (troisième ligne)
-    for col in range(8, 11):  # Colonnes H (8) à J (10)
-        ws.cell(row=current_row + 2, column=col, value=titles[col - 8]).font = Font(bold=True)
+    # Ajouter des titres dans les cellules I2 à K2 (troisième ligne)
+    for col in range(9, 12):  # Colonnes I (9) à K (11)
+        ws.cell(row=current_row + 2, column=col, value=titles[col - 9]).font = Font(bold=True)
         ws.cell(row=current_row + 2, column=col).alignment = Alignment(horizontal="center", vertical="center")
 
     # Retourner la nouvelle ligne pour la suite
     return current_row + 3
+
 
 
 def create_table_especes_inscrites(ws, current_row):

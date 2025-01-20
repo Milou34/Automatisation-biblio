@@ -1,6 +1,5 @@
 from src.utils.utils import extract_info
 
-
 def process_habitats(typo_info_row, ws, current_row):
     """
     Traite les habitats à partir des balises TYPO_INFO_ROW et renvoie les valeurs des colonnes.
@@ -42,35 +41,40 @@ def process_habitats(typo_info_row, ws, current_row):
     
     if observation == "--":
         observation = "-"
-    elif len(observation)<6:
+    elif len(observation) < 6:
         observation = (observation_I_text + observation_S_text)
     else:
         observation = observation
         
     # Initialiser la liste des valeurs d'habitats
     habitats_values = ["", "", "", source_text, surface, observation]
+
     # Parcourir les balises TYPO_ROW pour extraire les informations supplémentaires
     for typo_row in typo_info_row.findall(".//TYPO_ROW"):
         lb_typo_element = typo_row.find("LB_TYPO")
         lb_typo = lb_typo_element.text if lb_typo_element is not None else ""
+
         # Récupérer tout le texte de la balise LB_HAB sans les balises de mise en forme comme <em>
         lb_hab_element = typo_row.find(".//LB_HAB")        
         lb_hab = (
             "".join(lb_hab_element.itertext()) if lb_hab_element is not None else ""
         )
-        # Extraire LB_CODE et combiner avec LB_HAB
-        lb_code = typo_row.find(".//LB_CODE").text
-        lb_code = lb_code if lb_code is not None else ""
-        lb_hab = str(lb_code) + " " + lb_hab
+        
+        # Extraire LB_CODE
+        lb_code_element = typo_row.find(".//LB_CODE")
+        lb_code = lb_code_element.text if lb_code_element is not None else ""
 
-        # Déterminer la colonne selon la valeur de LB_TYPO
+        # Déterminer les colonnes selon la valeur de LB_TYPO
         if lb_typo == "EUNIS 2012":
-            habitats_values[0] = lb_hab  # Colonne 1 pour EUNIS
+            habitats_values[0] = lb_code  # Colonne 1 pour le code EUNIS
+            habitats_values[1] = lb_hab  # Colonne adjacente pour le hab EUNIS
         elif lb_typo == "CORINE biotopes":
-            habitats_values[1] = lb_hab  # Colonne 2 pour CORINE
+            habitats_values[2] = lb_code  # Colonne 2 pour le code CORINE
+            habitats_values[3] = lb_hab  # Colonne adjacente pour le hab CORINE
         elif lb_typo == "Habitats d'intérêt communautaire (HIC)":
-            habitats_values[2] = lb_hab  # Colonne 3 pour HIC
-            
+            habitats_values[4] = lb_code  # Colonne 3 pour le code HIC
+            habitats_values[5] = lb_hab  # Colonne adjacente pour le hab HIC
+
     # Ajouter les données à la feuille Excel
     ws.append(habitats_values)
 

@@ -30,8 +30,11 @@ def process_znieff(ws, root, current_row):
             ws,
             "Habitats déterminants",
             [
-                "EUNIS",
+                "Code EUNIS",
+                "Habitat EUNIS",
+                "Code CB",
                 "CORINE biotopes",
+                "Code HIC",
                 "Habitats d’intérêt communautaire",
                 "Source",
                 "Surface en %",
